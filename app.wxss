@@ -1,0 +1,32 @@
+/* 全局样式（兼容微信小程序 WXSS，无 CSS 变量） */
+/* 主题色手动列出，后续如果需要换色，可全文检索替换 */
+page {background:#f5f7fb;color:#1f2933;line-height:1.5;padding-bottom:120px;}
+/* 基础排版 */
+.tabbar-spacer{height:70px;}
+.tabbar{position:fixed;left:0;right:0;bottom:0;height:64px;background:#ffffff;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-around;font-size:12px;z-index:50;box-shadow:0 -4px 12px -4px rgba(0,0,0,.06);} 
+.tabbar a{flex:1;text-decoration:none;color:#5f6b7a;display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:500;padding:6px 4px;position:relative;}
+.tabbar a .icon{font-size:22px;line-height:1;} 
+.tabbar a.active{color:#3366ff;} 
+
+/* 卡片 */
+.card{background:#ffffff;border-radius:14px;padding:16px;box-shadow:0 4px 12px -4px rgba(0,0,0,.08);border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:12px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px;position:relative;padding-left:8px;}
+.card-title:before{content:"";position:absolute;left:0;top:50%;width:4px;height:60%;background:#3366ff;border-radius:2px;transform:translateY(-50%);} 
+.sub-note{font-size:12px;color:#5f6b7a;font-weight:400;}
+
+/* 日期 / 欢迎 */
+.date-block{display:flex;align-items:baseline;gap:8px;font-size:14px;color:#5f6b7a;} 
+.date-block .date{font-size:18px;font-weight:600;color:#1f2933;} 
+.greeting{margin-top:4px;font-size:18px;font-weight:500;}
+
+/* 习惯滚动 */
+.habit-scroll{display:flex;overflow-x:auto;gap:12px;padding-bottom:4px;}
+.habit-item{flex:0 0 auto;width:110px;background:#f1f5f9;border-radius:12px;padding:10px;text-align:center;display:flex;flex-direction:column;gap:4px;}
+
+/* 运动概览 */
+.sport-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start;}
+.sport-summary .metric{background:#f1f5f9;border-radius:12px;padding:10px;text-align:center;}
+
+/* 通用辅助类 */
+.hidden{display:none !important;}

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "习惯管理",
+  "usingComponents": {
+    "app-fab": "/components/fab/fab"
+  }
+}

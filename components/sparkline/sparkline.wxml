@@ -1,0 +1,4 @@
+<block wx:if="{{data && data.length}}">
+	<canvas type="2d" canvas-id="spk{{cid}}" class="spk-c"></canvas>
+</block>
+<view wx:else class="spk-empty">{{emptyText}}</view>

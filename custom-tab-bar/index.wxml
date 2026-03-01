@@ -1,0 +1,8 @@
+<view class="tabbar">
+  <block wx:for="{{list}}" wx:key="pagePath">
+    <view class="tab-item {{bounceIndex===index ? 'bounce' : ''}}" data-index="{{index}}" bindtap="onTap">
+      <text class="icon">{{item.icon}}</text>
+      <text class="text">{{item.text}}</text>
+    </view>
+  </block>
+</view>

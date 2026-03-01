@@ -1,0 +1,94 @@
+/* 取自原型 style.css 精简适配 */
+page{background:#f5f7fb;color:#1f2933;}
+.page .content{padding:32rpx;display:flex;flex-direction:column;gap:32rpx;}
+.app-header{padding:32rpx 32rpx 0;}
+.app-header .h1{font-size:40rpx;font-weight:600;}
+.card{background:#ffffff;border-radius:28rpx;padding:32rpx;box-shadow:0 16rpx 24rpx -12rpx rgba(0,0,0,0.08);border:1px solid #e2e8f0;display:flex;flex-direction:column;gap:28rpx;}
+.card-title{font-size:32rpx;font-weight:600;}
+.form-item{display:flex;flex-direction:column;gap:12rpx;font-size:28rpx;}
+.form-item.inline{flex-direction:row;align-items:center;justify-content:space-between;}
+.form-item.inline-date .dt-row{display:flex;gap:16rpx;}
+.label.small{font-size:24rpx;color:#5f6b7a;}
+input,picker, .picker{padding:20rpx 24rpx;border:1px solid #e2e8f0;border-radius:20rpx;background:#fff;}
+input{font-size:28rpx;}
+.picker.small{padding:12rpx 20rpx;}
+.seg{display:flex;background:#f1f5f9;border-radius:20rpx;overflow:hidden;}
+.seg-item{flex:1;text-align:center;padding:16rpx 0;font-size:28rpx;color:#5f6b7a;}
+.seg-item.active{background:#3366ff;color:#fff;font-weight:600;}
+.btn{border:none;border-radius:20rpx;padding:20rpx 0;background:#e2e8f0;color:#1f2933;font-size:30rpx;font-weight:500;}
+.btn.primary{background:#3366ff;color:#fff;}
+.btn.full{width:100%;}
+.btn.now-btn{padding:12rpx 24rpx;font-size:24rpx;line-height:1;}
+.actions-row{display:flex;gap:20rpx;align-items:center;}
+.actions-row .full{flex:1;}
+.bill-table{min-width:900rpx;display:flex;flex-direction:column;font-size:24rpx;}
+.bill-table .tr{display:flex;}
+.bill-table .th,.bill-table .td{padding:12rpx 16rpx;border-bottom:1px solid #e2e8f0;min-width:120rpx;}
+.bill-table .th{background:#f1f5f9;font-weight:500;}
+.bill-table .td.neg{color:#d92c2c;}
+.bill-table .td.pos{color:#15803d;}
+.bill-table .td.col-op{min-width:150rpx;}
+.op{margin-right:16rpx;color:#2563eb;}
+.op.del{color:#dc2626;}
+.table-scroll{white-space:nowrap;}
+.sub-note{font-size:22rpx;color:#5f6b7a;}
+.analytics .month-row{display:flex;justify-content:space-between;align-items:center;font-size:24rpx;padding:8rpx 0;border-bottom:1px solid #eef2f6;}
+.analytics .month-row:last-child{border-bottom:none;}
+.analytics .m-left{display:flex;flex-direction:column;gap:6rpx;min-width:160rpx;}
+.analytics .m-month{font-weight:600;}
+.analytics .m-savings{color:#15803d;}
+.analytics .m-bars{display:flex;gap:12rpx;flex:1;flex-wrap:wrap;}
+.analytics .bar{background:#f1f5f9;padding:6rpx 14rpx;border-radius:14rpx;}
+.analytics .bar.income{color:#1d4ed8;}
+.analytics .bar.expense{color:#b91c1c;}
+.analytics .bar.rate{color:#065f46;}
+.analytics .split{height:1px;background:#e2e8f0;margin:12rpx 0;}
+.analytics .card-sub{font-size:26rpx;font-weight:600;}
+.cat-list{display:flex;flex-direction:column;gap:8rpx;font-size:24rpx;}
+.cat-item{display:flex;justify-content:space-between;}
+.cat-name{color:#334155;}
+.cat-val{color:#475569;}
+.cat-total{margin-top:8rpx;font-size:22rpx;color:#475569;}
+.recur .card-title{display:flex;justify-content:space-between;align-items:center;}
+.btn.small{padding:12rpx 24rpx;font-size:24rpx;line-height:1;background:#2563eb;color:#fff;}
+.recur-list{display:flex;flex-direction:column;gap:20rpx;}
+.recur-item{border:1px solid #e2e8f0;padding:20rpx;border-radius:20rpx;display:flex;flex-direction:column;gap:12rpx;background:#f8fafc;}
+.recur-item.pending{border-color:#f59e0b;background:#fff7ed;}
+.ri-main{display:flex;flex-wrap:wrap;gap:16rpx;align-items:center;font-size:26rpx;}
+.ri-cat{font-weight:600;}
+.ri-amt{color:#334155;}
+.ri-day{color:#475569;}
+.ri-kind.pos{color:#166534;}
+.ri-kind.neg{color:#b91c1c;}
+.ri-state.on{color:#2563eb;}
+.ri-state.off{color:#64748b;}
+.ri-last{font-size:22rpx;color:#64748b;}
+.ri-badge{background:#f59e0b;color:#fff;padding:4rpx 12rpx;border-radius:12rpx;font-size:22rpx;}
+.ri-ops{display:flex;gap:20rpx;font-size:24rpx;}
+.bulk-row{display:flex;gap:16rpx;margin-top:8rpx;}
+.btn.tiny{padding:8rpx 16rpx;font-size:22rpx;background:#475569;color:#fff;}
+.dialog .dialog-content{max-width:640rpx;}
+.recur-filters{display:flex;flex-direction:column;gap:16rpx;}
+.sort-row{display:flex;gap:16rpx;align-items:center;font-size:22rpx;}
+.sort-btn{background:#f1f5f9;padding:8rpx 16rpx;border-radius:14rpx;}
+.sort-btn.active{background:#2563eb;color:#fff;}
+.week-select{display:flex;gap:12rpx;flex-wrap:wrap;}
+.week-select .wk{width:56rpx;height:56rpx;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#e2e8f0;color:#374151;}
+.week-select .wk.on{background:#2563eb;color:#fff;font-weight:600;}
+.template-shortcuts{display:flex;flex-wrap:wrap;gap:12rpx;align-items:center;}
+.template-shortcuts .tpl-btn{background:#eef2ff;color:#334155;padding:8rpx 18rpx;border-radius:16rpx;font-size:22rpx;}
+.template-shortcuts .tip{font-size:22rpx;color:#64748b;}
+.summary{font-size:22rpx;color:#475569;margin-left:12rpx;}
+/* 必要性颜色: 5 极必要 -> 深绿；1 冲动 -> 红 */
+.nec5{color:#065f46;font-weight:600;}
+.nec4{color:#15803d;font-weight:600;}
+.nec3{color:#ca8a04;font-weight:600;}
+.nec2{color:#d97706;font-weight:600;}
+.nec1{color:#dc2626;font-weight:600;}
+.quick-row{display:flex;flex-wrap:wrap;gap:12rpx;margin-top:12rpx;align-items:center;}
+.q-label{font-size:22rpx;color:#64748b;}
+.q-btn{background:#e0f2fe;color:#0369a1;padding:8rpx 18rpx;border-radius:16rpx;font-size:24rpx;}
+.q-btn.cat{background:#ede9fe;color:#6d28d9;}
+/* 日志弹层可复用现有 dialog 样式，用列表显示 */
+.log-list{max-height:400rpx;overflow:auto;display:flex;flex-direction:column;gap:12rpx;font-size:24rpx;margin-top:16rpx;}
+.log-item{display:flex;justify-content:space-between;background:#f1f5f9;padding:12rpx 20rpx;border-radius:14rpx;}

@@ -1,0 +1,28 @@
+page, .sport-page{background:#f5f7fb;min-height:100vh;padding-bottom:70px;}
+.app-header{padding:16px 16px 8px;}
+.h1{font-size:20px;font-weight:600;}
+.content{padding:16px;display:flex;flex-direction:column;gap:16px;}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px;box-shadow:0 4px 12px -4px rgba(0,0,0,.08);} 
+.card-title{font-size:16px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.form-item{display:flex;flex-direction:column;gap:6px;font-size:14px;}
+.form-item.inline{flex-direction:row;align-items:center;justify-content:space-between;}
+label{font-size:12px;color:#5f6b7a;}
+input{padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;font-size:14px;}
+.picker-display{padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;}
+.btn{border:none;cursor:pointer;border-radius:10px;padding:8px 14px;font-size:14px;background:#e2e8f0;color:#1f2933;transition:.2s;font-weight:500;}
+.btn.primary{background:#3366ff;color:#fff;}
+.btn.outline{background:transparent;border:1px solid #3366ff;color:#3366ff;}
+.btn.full{width:100%;}
+.metric-fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:4px;}
+.metric-fields .mf-box{display:flex;flex-direction:column;gap:4px;background:#f8fafc;padding:8px 10px;border-radius:10px;font-size:12px;}
+.metric-fields .mf-box label{font-size:12px;color:#5f6b7a;}
+.metric-fields .mf-box input{padding:6px 8px;font-size:14px;border-radius:8px;}
+.sub-note{font-size:12px;color:#5f6b7a;font-weight:400;}
+.history-item{background:#f8fafc;padding:10px 12px;border-radius:12px;display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+.history-item:last-child{margin-bottom:0;}
+.h-top{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;}
+.h-metrics{display:flex;flex-wrap:wrap;gap:6px;}
+.pill{background:#e2e8f0;padding:2px 8px;border-radius:20px;font-size:11px;}
+.flag-sync{font-size:11px;color:#15803d;}
+.flag-synced{font-size:11px;color:#2563eb;}
+@media (max-width:560px){ .metric-fields{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));} }

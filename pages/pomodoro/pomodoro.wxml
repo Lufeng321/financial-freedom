@@ -1,0 +1,40 @@
+<view class="page pomodoro-page">
+    <view class="app-header">
+        <text class="app-title">番茄钟</text>
+    </view>
+    <view class="content">
+        <!-- 计时器卡片 -->
+        <view class="card pomodoro-card">
+            <view class="card-title">计时器</view>
+            <view class="circle-timer">
+                <canvas type="2d" canvas-id="pomoRing" class="ring-canvas" disable-scroll="true"></canvas>
+                <text class="time-display">{{timeDisplay}}</text>
+                <picker mode="selector" range="{{taskNames}}" value="{{selectedTaskIndex}}" bindchange="onTaskChange">
+                    <view class="picker task-select">{{taskNames[selectedTaskIndex] || '关联任务'}}</view>
+                </picker>
+                <picker mode="selector" range="{{sessionTypeOptions}}" value="{{sessionTypeIndex}}" bindchange="onSessionTypeChange">
+                    <view class="picker session-type">{{sessionTypeOptions[sessionTypeIndex]}}</view>
+                </picker>
+                <picker mode="selector" range="{{skillNames}}" value="{{bindSkillIndex}}" bindchange="pickBindSkill">
+                    <view class="picker bind-skill">{{ bindSkillIndex>=0 ? (skillNames[bindSkillIndex]||'') : '绑定技能(可选)'}}</view>
+                </picker>
+            </view>
+            <view class="timer-actions">
+                <button class="btn primary" bindtap="startTimer" disabled="{{running}}">开始</button>
+                <button class="btn" bindtap="pauseTimer" disabled="{{!running}}">暂停</button>
+                <button class="btn outline" bindtap="resetTimer" disabled="{{remaining==totalDuration && !hasStarted}}">重置</button>
+            </view>
+            <view class="reward-message" wx:if="{{showReward}}">+{{workMinutes}} XP 已记录</view>
+        </view>
+        <!-- 历史 -->
+        <view class="card history-card">
+            <view class="card-title">历史记录</view>
+            <view class="pomodoro-history">
+                <block wx:for="{{history}}" wx:key="id">
+                    <view class="history-item">{{item.time}} 完成 番茄 ({{item.task}})</view>
+                </block>
+            </view>
+        </view>
+        <app-fab />
+    </view>
+</view>

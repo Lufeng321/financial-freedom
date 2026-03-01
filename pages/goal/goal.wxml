@@ -1,0 +1,45 @@
+<view class="page goal-page">
+  <view class="section">
+    <view class="head">
+      <text class="title">目标概览</text>
+    </view>
+    <view class="goal-block">
+      <view class="g-row">
+        <text class="lab">应急金</text>
+        <view class="bar"><view class="fill emergency" style="width: {{emergency.pct}}%;"></view></view>
+        <text class="val">{{emergency.pct}}%</text>
+      </view>
+      <view class="eta" wx:if="{{emergency.eta}}">预计达成: {{emergency.eta}}</view>
+      <view class="g-row">
+        <text class="lab">被动收入</text>
+        <view class="bar"><view class="fill passive" style="width: {{freedomPassive.pct}}%;"></view></view>
+        <text class="val">{{freedomPassive.pct}}%</text>
+      </view>
+      <view class="eta" wx:if="{{freedomPassive.eta}}">ETA {{freedomPassive.eta}}</view>
+      <view class="g-row">
+        <text class="lab">储蓄率</text>
+        <view class="bar"><view class="fill savings" style="width: {{savingsRate.pct}}%;"></view></view>
+        <text class="val">{{savingsRate.pct}}%</text>
+      </view>
+    </view>
+  </view>
+  <view class="section">
+    <view class="head"><text class="title">参数设置</text></view>
+    <view class="smart-bar">
+      <button size="mini" class="btn" bindtap="recommendAll">智能推荐全部</button>
+    </view>
+    <view class="form-item">
+      <text class="label">应急金目标</text>
+      <input type="number" value="{{goalForm.emergencyFundTarget}}" data-field="emergencyFundTarget" bindinput="inputGoal" placeholder="金额" />
+    </view>
+    <view class="form-item">
+      <text class="label">目标储蓄率%</text>
+      <input type="number" value="{{goalForm.savingsRateTarget}}" data-field="savingsRateTarget" bindinput="inputGoal" placeholder="40" />
+    </view>
+    <view class="form-item">
+      <text class="label">被动收入目标(年)</text>
+      <input type="number" value="{{goalForm.freedomPassiveTarget}}" data-field="freedomPassiveTarget" bindinput="inputGoal" placeholder="年度必要支出" />
+    </view>
+    <view class="actions"><button class="btn primary" bindtap="saveGoals">保存</button></view>
+  </view>
+</view>

@@ -1,0 +1,91 @@
+<view class="page todo-page pg-reset">
+	<view class="app-header"><text class="h1">待办管理</text></view>
+	<view class="content">
+		<!-- 添加待办卡片 -->
+		<view class="card add-todo">
+			<view class="card-title">添加待办</view>
+			<view class="todo-form">
+				<input class="ipt" placeholder="输入待办内容" value="{{form.title}}" bindinput="onFormInput" data-field="title" />
+				<picker mode="date" value="{{form.due}}" bindchange="onPickDate">
+					<view class="picker-line">截止：<text>{{form.due||'未设置'}}</text></view>
+				</picker>
+				<picker mode="selector" range="{{priorityRange}}" value="{{priorityIndex}}" bindchange="pickPriority">
+					<view class="picker-line">优先级：<text>{{priorityRange[priorityIndex]}}</text></view>
+				</picker>
+				<input class="ipt" placeholder="标签 逗号分隔" value="{{form.labels}}" bindinput="onFormInput" data-field="labels" />
+				<label class="inline"><switch checked="{{form.focus}}" bindchange="toggleFocus" /> 设为今日焦点</label>
+				<label class="inline"><switch checked="{{form.wealthLever}}" bindchange="toggleWealthLever" /> 财富杠杆</label>
+				<button class="btn primary full" bindtap="addTodo">添加</button>
+			</view>
+		</view>
+
+		<!-- 待办列表卡片 -->
+		<view class="card todo-list-section">
+			<view class="card-title">
+				待办列表 <text class="sub-note">焦点 {{focusCount}}/{{FOCUS_LIMIT}}</text>
+			</view>
+			<view class="stats-line">
+				<text>进度 {{statDone}} / {{statTotal}}</text>
+				<view class="progress-bar"><view class="inner" style="width:{{statRate*100}}%;"></view></view>
+				<text class="rate">{{statRatePercent}}%</text>
+			</view>
+			<view class="toolbar">
+				<picker mode="selector" range="{{filterPriorityRange}}" value="{{filterPriorityIndex}}" bindchange="changeFilterPriority">
+					<view class="tool-pill">{{filterPriorityRange[filterPriorityIndex]}}</view>
+				</picker>
+				<picker mode="selector" range="{{filterStatusRange}}" value="{{filterStatusIndex}}" bindchange="changeFilterStatus">
+					<view class="tool-pill">{{filterStatusRange[filterStatusIndex]}}</view>
+				</picker>
+				<picker mode="selector" range="{{sortRange}}" value="{{sortIndex}}" bindchange="changeSort">
+					<view class="tool-pill">{{sortRange[sortIndex]}}</view>
+				</picker>
+				<input class="search" placeholder="搜索 (标题/标签)" value="{{searchQuery}}" bindinput="onSearch" />
+				<button class="btn small" bindtap="batchComplete">全部完成</button>
+				<button class="btn small ghost" bindtap="clearCompleted">清除完成</button>
+			</view>
+			<view>
+				<view wx:if="{{filteredTodos.length===0}}" class="empty-note">暂无待办（试着添加 3 条形成计划）</view>
+				<block wx:for="{{filteredTodos}}" wx:key="id">
+					<view class="todo-item priority-{{item.priority}} {{item.done?'done':''}} {{item.focus?'focus':''}} {{item.__meta.overdue?'overdue':''}} {{item.__meta.today?'today':''}} {{item.__meta.soon?'soon':''}}" data-id="{{item.id}}" aria-label="待办 {{item.title}} 优先级 {{item.priority}} {{item.focus?'焦点':''}} {{item.wealthLever?'财富杠杆':''}}">
+						<label class="item-main">
+							<checkbox checked="{{item.done}}" bindchange="toggleDone" data-id="{{item.id}}" />
+							<text class="title">{{item.title}}</text>
+							<text class="tag {{item.priority==='high'?'tag-high': item.priority==='medium'?'tag-medium':'tag-low'}}" aria-label="优先级 {{item.priority==='high'?'高': item.priority==='medium'?'中':'低'}}">{{item.priority==='high'?'高': item.priority==='medium'?'中':'低'}}</text>
+							<text wx:if="{{item.due}}" class="due" aria-label="截止 {{item.due}}">{{item.due}}</text>
+							<text wx:if="{{item.wealthLever}}" class="flag flag-lever">杠杆</text>
+							<text wx:if="{{item.__meta.overdue}}" class="flag flag-overdue">逾期</text>
+							<text wx:if="{{item.__meta.today}}" class="flag flag-today">今日</text>
+							<text wx:if="{{item.__meta.soon}}" class="flag flag-soon">明日</text>
+							<block wx:if="{{item.labels && item.labels.length}}">
+								<text wx:for="{{item.labels}}" wx:key="*this" class="tag tag-label" aria-label="标签 {{item}}">{{item}}</text>
+							</block>
+						</label>
+						<view class="actions">
+							<button class="btn text" size="mini" data-id="{{item.id}}" bindtap="setFocus" aria-label="设为焦点">焦点</button>
+							<button class="btn text" size="mini" data-id="{{item.id}}" bindtap="startPomodoro" aria-label="开始番茄">番茄</button>
+							<button class="btn text" size="mini" data-id="{{item.id}}" bindtap="openEdit">编辑</button>
+							<button class="btn text danger" size="mini" data-id="{{item.id}}" bindtap="deleteTodo">删除</button>
+						</view>
+					</view>
+				</block>
+			</view>
+		</view>
+	</view>
+
+	<!-- 编辑弹窗 -->
+	<view class="dialog {{editVisible?'':'hidden'}}" catchtouchmove="true">
+		<view class="dialog-content">
+			<view class="dialog-title">编辑待办</view>
+			<input class="ipt" value="{{editForm.title}}" data-field="title" bindinput="onEditInput" />
+			<picker mode="date" value="{{editForm.due}}" bindchange="onEditPickDate"><view class="picker-line">截止：<text>{{editForm.due||'未设置'}}</text></view></picker>
+			<picker mode="selector" range="{{priorityRange}}" value="{{editPriorityIndex}}" bindchange="editPickPriority"><view class="picker-line">优先级：<text>{{priorityRange[editPriorityIndex]}}</text></view></picker>
+			<input class="ipt" value="{{editForm.labels}}" data-field="labels" bindinput="onEditInput" placeholder="标签" />
+			<label class="inline"><switch checked="{{editForm.focus}}" bindchange="editToggleFocus" /> 今日焦点</label>
+			<view class="dialog-actions">
+				<button class="btn" bindtap="closeEdit">取消</button>
+				<button class="btn primary" bindtap="saveEdit">保存</button>
+			</view>
+		</view>
+	</view>
+</view>
+<app-fab />

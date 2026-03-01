@@ -1,0 +1,45 @@
+<view class="gd-page">
+  <view class="hero">
+    <text class="score">{{score}}%</text>
+    <text class="label">综合成长指数</text>
+    <text class="desc">该指数由 杠杆 / 专注 / 健康 / 技能 / 财务 五个维度加权组成，用于快速衡量本周综合成长状态。</text>
+    <view class="shortfall" wx:if="{{shortDim}}">
+      <text class="sf-text">当前短板：{{shortDimName}}，完成下列建议可提升至 ~{{projectedScore}}%</text>
+    </view>
+  </view>
+  <view class="segments">
+    <block wx:for="{{segments}}" wx:key="key">
+      <view class="seg-card">
+        <view class="head">
+          <text class="name">{{item.name}}</text>
+          <text class="pct">{{item.pct}}%</text>
+        </view>
+        <view class="bar"><view class="fill" style="width: {{item.pct}}%;"></view></view>
+        <text class="tip">{{item.tip}}</text>
+        <button size="mini" class="action" data-url="{{item.url}}" bindtap="go">{{item.cta||'去提升'}}</button>
+      </view>
+    </block>
+  </view>
+  <view class="radar-section">
+    <text class="radar-title">成长雷达</text>
+  <canvas type="2d" id="radarCanvas" class="radar-canvas" canvas-id="radarCanvas" bindtap="tapRadar"></canvas>
+    <view class="radar-legend">
+      <view class="lg primary">当前</view>
+      <view class="lg prev">上期</view>
+    </view>
+    <view class="radar-subdims">
+      <block wx:for="{{subscoresList}}" wx:key="k">
+        <view class="sd-row">
+          <text class="sd-name">{{item.name}}</text>
+          <text class="sd-val">{{item.val}}%</text>
+          <text class="sd-delta {{item.delta>0?'up':(item.delta<0?'down':'')}}" wx:if="{{item.delta!=null}}">{{item.delta>0? '+'+item.delta:item.delta}}%</text>
+        </view>
+      </block>
+    </view>
+  </view>
+  <view class="explain">
+    <text class="ttl">计算说明（MVP）</text>
+    <text class="p">score = 杠杆25% + 专注25% + 健康20% + 技能ROI 15% + FI进度15%。</text>
+    <text class="p">后续将根据你的行为数据动态调权，并提供个性化提升建议。</text>
+  </view>
+</view>

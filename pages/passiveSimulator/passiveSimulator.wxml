@@ -1,0 +1,33 @@
+<view class="page sim-page">
+  <view class="section">
+    <view class="form-row">
+      <text class="lab">投入资本 (¥)</text>
+      <slider min="0" max="500000" step="1000" value="{{capital}}" bindchange="onSlide" data-field="capital" show-value />
+    </view>
+    <view class="val-display">{{capital}}</view>
+    <view class="form-row">
+      <text class="lab">每月追加投入 (¥)</text>
+      <slider min="0" max="50000" step="100" value="{{monthlyContribution}}" bindchange="onSlide" data-field="monthlyContribution" show-value />
+    </view>
+    <view class="val-display">{{monthlyContribution}} /月</view>
+    <view class="form-row">
+      <text class="lab">预期年化 (%)</text>
+      <slider min="1" max="30" step="0.5" value="{{annualRate}}" bindchange="onSlide" data-field="annualRate" show-value />
+    </view>
+    <view class="val-display">{{annualRate}}%</view>
+    <view class="form-row">
+      <text class="lab">复利年数</text>
+      <slider min="1" max="40" step="1" value="{{years}}" bindchange="onSlide" data-field="years" show-value />
+    </view>
+    <view class="val-display">{{years}} 年</view>
+  </view>
+  <view class="section result">
+    <view class="res-row"><text>期末资产本金+收益</text><text class="v">¥{{futureValue}}</text></view>
+    <view class="res-row"><text>期末年度被动收入(估)</text><text class="v">¥{{futurePassiveYear}}</text></view>
+    <view class="res-row"><text>覆盖当前年支出</text><text class="v">{{coveragePct}}%</text></view>
+    <view class="res-row"><text>FI 年度缩短估计</text><text class="v">约 {{fiShortenYears}} 年</text></view>
+  </view>
+  <view class="section note">
+  <text class="tip">说明：复利 + 月定投：FV = P*(1+r)^n + M * [((1+r/12)^(12n)-1)/(r/12)]。年度被动≈FV*r；支出覆盖率基于当前年支出；FI 缩短 = (未来被动收入提升 / 当前年支出)*基准年数(10) 近似。</text>
+  </view>
+</view>

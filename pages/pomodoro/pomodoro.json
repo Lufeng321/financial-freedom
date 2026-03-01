@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "app-fab": "/components/fab/fab"
+  },
+  "navigationBarTitleText": "番茄钟"
+}

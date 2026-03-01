@@ -1,0 +1,76 @@
+/* 公共样式 (变量已展开，兼容小程序 WXSS) */
+/* 颜色常量: primary=#3366ff bg=#f5f7fb card=#ffffff border=#e2e8f0 text=#1f2933 sub=#5f6b7a */
+/* 如需全局 reset，可在各页面最外层容器使用 pg-reset 类；移除通配符避免旧版本编译错误 */
+.pg-reset{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;}
+body{background:#f5f7fb;color:#1f2933;line-height:1.5;padding-bottom:240rpx;}
+.tabbar-spacer{height:140rpx;}
+.tabbar{position:fixed;left:0;right:0;bottom:0;height:128rpx;background:#fff;border-top:2rpx solid #e2e8f0;display:flex;align-items:center;justify-content:space-around;font-size:24rpx;z-index:50;box-shadow:0 -8rpx 24rpx -8rpx rgba(0,0,0,.06);} 
+.tabbar a{flex:1;text-decoration:none;color:#5f6b7a;display:flex;flex-direction:column;align-items:center;gap:8rpx;font-weight:500;padding:12rpx 8rpx;position:relative;}
+.tabbar a .icon{font-size:44rpx;line-height:1;} 
+.tabbar a.active{color:#3366ff;} 
+/* focus-visible 不完全支持，保持样式简化 */
+.tabbar a:active{color:#3366ff;}
+
+/* 折叠块通用 */
+.collapsible{position:relative;}
+.collapsible .collapse-body {margin-top:24rpx;}
+.collapse-toggle-btn{border:none;background:#f1f5f9;color:#1f2933;padding:8rpx 16rpx;border-radius:16rpx;font-size:24rpx;display:inline-flex;align-items:center;gap:8rpx;}
+.collapse-toggle-btn:hover{background:#e2e8f0;}
+.collapsed .data-collapse-body{display:none;}
+
+/* 表格容器可滚动 */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+/* 去除不支持的滚动条伪元素 */
+.page .content{padding:32rpx;display:flex;flex-direction:column;gap:32rpx;}
+.app-header{padding:32rpx 32rpx 16rpx;}
+.app-header h1,.app-header .h1{font-size:40rpx;font-weight:600;}
+
+.card{background:#ffffff;border-radius:28rpx;padding:32rpx;box-shadow:0 32rpx 96rpx -32rpx rgba(0,0,0,.08);border:2rpx solid #e2e8f0;}
+.card-title{font-size:32rpx;font-weight:600;margin-bottom:24rpx;display:flex;align-items:center;gap:16rpx;}
+
+/* 待办列表通用 */
+.todo-page .todo-list{list-style:none;display:flex;flex-direction:column;gap:16rpx;}
+.todo-item{background:#f8fafc;padding:20rpx 24rpx;border-radius:20rpx;display:flex;justify-content:space-between;align-items:center;gap:24rpx;font-size:28rpx;}
+.todo-item.done{opacity:.5;text-decoration:line-through;}
+.tag{display:inline-block;padding:6rpx 16rpx;border-radius:16rpx;font-size:24rpx;margin-left:12rpx;}
+.tag-high{background:#ffe4e4;color:#d92c2c;}
+/* 中优先级 */
+.tag-medium{background:#fff4d6;color:#b7791f;}
+.tag-low{background:#e6f6ff;color:#046c9a;}
+.sub-note{font-size:24rpx;color:#5f6b7a;font-weight:400;}
+
+/* 表单与按钮 */
+form,.todo-form{display:flex;flex-direction:column;gap:24rpx;}
+input,select,textarea{padding:20rpx 24rpx;border:2rpx solid #e2e8f0;border-radius:20rpx;background:#fff;font-size:28rpx;}
+.btn{border:none;border-radius:20rpx;padding:16rpx 32rpx;font-size:28rpx;background:#e2e8f0;color:#1f2933;font-weight:500;}
+.btn.primary{background:#3366ff;color:#fff;}
+.btn.text{background:transparent;padding:8rpx 12rpx;color:#3366ff;} 
+.btn.small{font-size:24rpx;padding:8rpx 16rpx;}
+.btn.full{width:100%;}
+.btn.danger{color:#d92c2c;}
+
+.dialog{position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;padding:32rpx;}
+.dialog.hidden{display:none;}
+.dialog-content{background:#fff;padding:40rpx;border-radius:28rpx;width:100%;max-width:640rpx;display:flex;flex-direction:column;gap:24rpx;}
+.dialog-actions{display:flex;justify-content:flex-end;gap:24rpx;}
+
+/* 其它模块(供未来页面共享, 保留选择器避免冲突) */
+.habit-list{list-style:none;display:flex;flex-direction:column;gap:20rpx;}
+.habit-row{display:flex;align-items:center;justify-content:space-between;padding:20rpx 24rpx;background:#f8fafc;border-radius:20rpx;}
+.habit-row .info{display:flex;flex-direction:column;gap:4rpx;}
+.streak{font-size:24rpx;color:#5f6b7a;}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8rpx;font-size:24rpx;}
+.calendar-grid .day{background:#f1f5f9;padding:12rpx;border-radius:12rpx;text-align:center;}
+.calendar-grid .day.done{background:#3366ff;color:#fff;}
+.calendar-grid .day.placeholder{background:transparent;}
+
+.bill-table{width:100%;border-collapse:collapse;font-size:24rpx;}
+.bill-table th,.bill-table td{padding:12rpx 16rpx;border-bottom:2rpx solid #e2e8f0;text-align:left;}
+.bill-table th{background:#f1f5f9;font-weight:500;}
+.bill-table td.neg{color:#d92c2c;}
+.bill-table td.pos{color:#15803d;}
+
+.progress-bar{height:16rpx;background:#e5e7eb;border-radius:8rpx;overflow:hidden;}
+.progress-bar .inner{height:100%;background:#3366ff;}
+
+/* 移除不支持的媒体查询 */

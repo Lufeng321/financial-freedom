@@ -1,0 +1,10 @@
+<view wx:if="{{visible}}" class="a-toast" aria-label="{{i18nUnlockAria}}">
+  <view class="inner">
+    <view class="icon">{{icon}}</view>
+    <view class="text">
+      <text class="title">{{i18nUnlockTitle}}</text>
+      <text class="name">{{name}}</text>
+      <text wx:if="{{desc}}" class="desc">{{desc}}</text>
+    </view>
+  </view>
+</view>

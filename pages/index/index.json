@@ -1,0 +1,16 @@
+{
+	"usingComponents": {
+		"t-button": "tdesign-miniprogram/button/button",
+		"t-cell": "tdesign-miniprogram/cell/cell",
+		"t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
+		"t-tag": "tdesign-miniprogram/tag/tag",
+		"t-checkbox": "tdesign-miniprogram/checkbox/checkbox",
+		"t-progress": "tdesign-miniprogram/progress/progress",
+		"t-icon": "tdesign-miniprogram/icon/icon",
+		"t-navbar": "tdesign-miniprogram/navbar/navbar",
+		"app-fab": "/components/fab/fab",
+		"quick-capture": "/components/quick-capture/quick-capture",
+		"achievement-toast": "/components/achievement-toast/achievement-toast"
+	},
+	"navigationBarTitleText": "今日视图"
+}

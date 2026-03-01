@@ -1,0 +1,50 @@
+<view class="page review-page">
+  <view class="tabs">
+    <view class="tab {{mode==='week'?'active':''}}" bindtap="switchMode" data-m="week">本周</view>
+    <view class="tab {{mode==='month'?'active':''}}" bindtap="switchMode" data-m="month">本月</view>
+  </view>
+  <view class="range-picker">
+    <button size="mini" bindtap="prevRange">◀</button>
+    <text class="label">{{dataObj.label}}</text>
+    <button size="mini" bindtap="nextRange">▶</button>
+  </view>
+  <view class="cards">
+    <view class="card summary" wx:if="{{dataObj.actionContrib}}">
+      <text class="title">智能摘要</text>
+      <view class="summary-text">本{{mode==='week'?'周':'月'}}你的主要投入：
+        <block wx:for="{{dataObj.actionContrib.slice(0,2)}}" wx:key="key">
+          <text class="chip">{{item.label}} {{item.value}}</text>
+        </block>
+        ，专注 {{dataObj.focusMinutesTotal}} 分钟，习惯完成率 {{dataObj.habitCompletionRate}}%。继续保持！
+      </view>
+    </view>
+    <view class="card kpi">
+      <view class="row"><text>储蓄率</text><text class="val">{{dataObj.savingsRate}}%</text></view>
+      <view class="row"><text>净资产变化(≈)</text><text class="val">{{dataObj.netAssetChange}}</text></view>
+      <view class="row"><text>被动收入增量</text><text class="val">{{dataObj.passiveIncomeDelta}}</text></view>
+      <view class="row"><text>番茄总时长</text><text class="val">{{dataObj.focusMinutesTotal}} 分钟</text></view>
+      <view class="row"><text>习惯完成率</text><text class="val">{{dataObj.habitCompletionRate}}%</text></view>
+    </view>
+    <view class="card list">
+      <text class="title">Top3 支出类别</text>
+      <block wx:for="{{dataObj.topExpenseCategories}}" wx:key="category">
+        <view class="row"><text>{{item.category}}</text><text class="val">{{item.amount}}</text></view>
+      </block>
+      <view wx:if="{{!dataObj.topExpenseCategories.length}}" class="empty">无记录</view>
+    </view>
+    <view class="card list">
+      <text class="title">Top3 技能小时</text>
+      <block wx:for="{{dataObj.topSkillHours}}" wx:key="skillId">
+        <view class="row"><text>{{resolveSkill(item.skillId)}}</text><text class="val">{{item.hours}} h</text></view>
+      </block>
+      <view wx:if="{{!dataObj.topSkillHours.length}}" class="empty">无记录</view>
+    </view>
+    <view class="card list">
+      <text class="title">心情分布</text>
+      <block wx:for="{{moodKeys}}" wx:key="k"><view class="row"><text>{{item}}</text><text class="val">{{dataObj.moodDistribution[item]}}</text></view></block>
+      <view wx:if="{{!moodKeys.length}}" class="empty">无日记</view>
+    </view>
+  </view>
+  <button class="share-btn" type="primary" bindtap="genShare">生成分享图</button>
+  <canvas type="2d" id="shareCanvas" style="width:750rpx;height:1000rpx;position:absolute;left:-9999px;top:-9999px;" />
+</view>

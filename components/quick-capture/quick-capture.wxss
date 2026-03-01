@@ -1,0 +1,13 @@
+.qc-mask{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;z-index:900;}
+.qc-panel{width:100%;background:#fff;border-radius:18px 18px 0 0;padding:16px 18px;max-height:70vh;overflow:auto;font-size:14px;}
+.qc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.qc-head .title{font-size:16px;font-weight:600;}
+.qc-head .close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:20px;color:#334155;}
+.qc-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.qc-tab{padding:6px 12px;border-radius:999px;background:#f1f5f9;color:#64748b;font-size:12px;}
+.qc-tab.active{background:#2563eb;color:#fff;}
+.qc-body{display:flex;flex-direction:column;gap:10px;}
+input{background:#f1f5f9;border-radius:8px;padding:8px 10px;}
+.picker{background:#f1f5f9;padding:10px;border-radius:8px;}
+button.primary{background:#2563eb;color:#fff;border:none;border-radius:8px;}
+button[disabled]{opacity:.5;}

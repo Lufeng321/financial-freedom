@@ -1,0 +1,28 @@
+<view class="page msg-page">
+  <view class="top-bar">
+  <text class="title">{{i18n.center}}</text>
+  <button size="mini" class="all-read" bindtap="markAllRead">{{i18n.markAll}}</button>
+  </view>
+  <view class="tabs">
+  <view class="tab {{activeTab==='all'?'active':''}}" data-tab="all" bindtap="switchTab">{{i18nTabs.all}}</view>
+  <view class="tab {{activeTab==='achievement'?'active':''}}" data-tab="achievement" bindtap="switchTab">{{i18nTabs.achievement}}</view>
+  <view class="tab {{activeTab==='budget'?'active':''}}" data-tab="budget" bindtap="switchTab">{{i18nTabs.budget}}</view>
+  <view class="tab {{activeTab==='remind'?'active':''}}" data-tab="remind" bindtap="switchTab">{{i18nTabs.remind}}</view>
+  <view class="tab {{activeTab==='system'?'active':''}}" data-tab="system" bindtap="switchTab">{{i18nTabs.system}}</view>
+  </view>
+  <view class="list">
+    <block wx:for="{{filtered}}" wx:key="id">
+      <view class="item {{item.read?'read':''}}">
+        <view class="row">
+          <text class="badge {{item.group}}">{{ renderBadge(item.group) }}</text>
+          <text class="text">{{item.text}}</text>
+        </view>
+        <view class="meta">
+          <text class="time">{{formatTime(item.time)}}</text>
+          <button size="mini" class="read-btn" data-id="{{item.id}}" bindtap="toggleRead">{{item.read? i18n.unread : i18n.read}}</button>
+        </view>
+      </view>
+    </block>
+  <view wx:if="{{!filtered.length}}" class="empty">{{i18n.empty}}</view>
+  </view>
+</view>

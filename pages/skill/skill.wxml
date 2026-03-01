@@ -1,0 +1,94 @@
+<view class="page skill-page">
+	<view class="app-header"><text class="h1">技能管理</text></view>
+	<view class="content">
+		<!-- 添加技能 -->
+		<view class="card add-skill">
+			<view class="card-title">添加技能</view>
+			<view class="form-col">
+				<input placeholder="技能名称" value="{{newSkill.name}}" data-field="name" bindinput="onNewSkillInput" />
+				<input type="number" placeholder="等级 (1-5)" value="{{newSkill.level}}" data-field="level" bindinput="onNewSkillInput" />
+				<view class="grid-2">
+					<input type="number" placeholder="累计投入小时" value="{{newSkill.investedHours}}" data-field="investedHours" bindinput="onNewSkillInput" />
+					<input type="number" placeholder="投入成本(¥)" value="{{newSkill.investedCost}}" data-field="investedCost" bindinput="onNewSkillInput" />
+				</view>
+				<view class="grid-2">
+					<input type="number" placeholder="预计年化提升(¥)" value="{{newSkill.expectedAnnualUplift}}" data-field="expectedAnnualUplift" bindinput="onNewSkillInput" />
+					<input type="number" placeholder="信心(%)" value="{{newSkill.confidence}}" data-field="confidence" bindinput="onNewSkillInput" />
+				</view>
+				<button class="btn primary full" bindtap="addSkill">添加</button>
+			</view>
+		</view>
+
+		<!-- AI 学习计划 -->
+		<view class="card ai-plan-card">
+			<view class="card-title">AI 学习计划 (原型)</view>
+			<view class="ai-plan-form">
+				<view class="form-item">
+					<text class="label">想学习的技能</text>
+					<input placeholder="例如：Python 数据分析" value="{{form.targetSkill}}" data-field="targetSkill" bindinput="onInput" />
+				</view>
+				<view class="form-item">
+					<text class="label">每天可投入时间 (分钟)</text>
+						<input type="number" placeholder="60" value="{{form.dailyMinutes}}" data-field="dailyMinutes" bindinput="onInput" />
+				</view>
+				<view class="form-item">
+					<text class="label">当前掌握情况</text>
+					<picker mode="selector" range="{{levelRange}}" value="{{levelIndex}}" bindchange="pickLevel"><view class="picker">{{levelRange[levelIndex]}}</view></picker>
+				</view>
+				<view class="form-item">
+					<text class="label">学习目标 (可选)</text>
+					<input placeholder="例如：3个月通过某证书" value="{{form.goal}}" data-field="goal" bindinput="onInput" />
+				</view>
+				<button class="btn primary full" bindtap="genPlan">生成学习计划</button>
+			</view>
+			<view class="plan-result" wx:if="{{planTasks.length}}">
+				<view class="plan-summary">{{planSummary}}</view>
+				<view>
+					<block wx:for="{{planTasks}}" wx:key="id">
+						<view class="plan-task {{item.selected?'sel':''}}" bindtap="toggleSelect" data-id="{{item.id}}">
+							<view class="pt-main">
+								<text class="pt-title">{{item.title}}</text>
+								<text class="pt-phase">{{item.phase}}</text>
+							</view>
+							<view class="pt-tags">
+								<text class="tag-high" wx:if="{{item.focus}}">焦点</text>
+								<text class="tag-low">{{item.est}}h</text>
+							</view>
+						</view>
+					</block>
+				</view>
+				<button class="btn outline full" bindtap="toggleSelectAll">{{allSelected?'取消全选':'全选'}}</button>
+				<button class="btn primary full" bindtap="importTodos">导入选中任务到待办</button>
+			</view>
+			<view class="sub-note">说明：此处 AI 生成逻辑为前端原型模拟，可后续接入真实大模型 API。</view>
+		</view>
+
+		<!-- 技能列表 -->
+		<view class="card skill-list-section">
+			<view class="card-title">技能列表</view>
+			<view>
+				<block wx:for="{{skills}}" wx:key="id">
+					<view class="skill-item">
+						<view class="info">
+							<view class="name">{{item.name}} <text class="roi-badge" wx:if="{{item.roiPercent!=null}}">ROI {{item.roiPercent}}%</text> <text wx:if="{{item.confidence!=null}}" class="conf-badge {{item.confidence<100?'decay':''}}">信心 {{item.confidence}}%</text></view>
+							<view class="progress-bar"><view class="inner" style="width:{{item.percent}}%"></view></view>
+							<view class="level">Lv {{item.level}} · {{item.percent}}% <text class="ea" wx:if="{{item.effectiveAnnual}}">¥{{item.effectiveAnnual}}</text></view>
+						</view>
+						<button class="btn small" data-id="{{item.id}}" bindtap="addExp">+经验</button>
+					</view>
+				</block>
+			</view>
+		</view>
+
+		<!-- 成就徽章 -->
+		<view class="card achievement-section">
+			<view class="card-title">成就徽章 (示例)</view>
+			<view class="badges">
+				<view class="badge">📘 学习达人</view>
+				<view class="badge">🔥 连续专注</view>
+				<view class="badge">💪 健康先锋</view>
+			</view>
+		</view>
+	</view>
+</view>
+<app-fab />

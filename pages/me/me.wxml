@@ -1,0 +1,187 @@
+<view class="page me-page">
+	<view class="app-header"><text class="h1">成长中心</text></view>
+	<view class="content">
+		<!-- 主：个人概览（精简） -->
+		<view class="card profile-card overview-v3 hero" aria-label="个人概览">
+			<view class="ovr-top">
+				<view class="avatar-stack" bindtap="chooseAvatar" style="--p:{{xpPercent}};" aria-label="头像与等级">
+					<view class="avatar">{{avatarEmoji}}</view>
+					<view class="status-dot {{loggedIn?'on':'off'}}" aria-hidden="true"></view>
+				</view>
+				<view class="main-meta">
+					<view class="name-line">
+						<input class="nickname" value="{{nickname}}" bindinput="editName" placeholder="输入昵称" aria-label="昵称编辑" />
+						<view class="level-pill" aria-label="当前等级">Lv {{level}}</view>
+						<button wx:if="{{!loggedIn}}" class="auth-pill login" size="mini" loading="{{loggingIn}}" bindtap="doLogin">{{ loggingIn? '…':'登录' }}</button>
+						<button wx:if="{{loggedIn}}" class="auth-pill logout" size="mini" bindtap="doLogout">退出</button>
+					</view>
+					<view class="insight-line" wx:if="{{insightLine}}">{{insightLine}}</view>
+					<!-- 统一 XP 条 -->
+								  <progress-bar percent="{{Number(xpPercent)}}" label="XP" size="small" showMeta="true" deltaThreshold="20" />
+								<view class="xp-legend compact">
+									<text class="xp-now">XP {{xp}}</text>
+									<text class="xp-next">升到 Lv{{level+1}} 还差 {{xpToNext}}</text>
+									<text class="xp-perc">{{xpPercent}}%</text>
+								</view>
+					<!-- 推荐任务（前2条） -->
+										<view class="recom-box" wx:if="{{recommendations.length}}">
+												<block wx:for="{{recommendations}}" wx:key="id">
+														<view class="recom-item" bindtap="onRecommendationTap" data-id="{{item.id}}">
+														  <view class="r-main"><text class="r-icon">{{item.icon}}</text>{{item.text}}</view>
+														  <view class="r-why">{{item.why}}</view>
+														</view>
+												</block>
+												<view class="recom-switch" bindtap="nextRecommendations">换一批 ▸</view>
+										</view>
+					<view class="id-row" wx:if="{{loggedIn && zyid}}" aria-label="自由号">
+						<text class="id-label">自由号</text>
+						<text class="id-value">{{zyid}}</text>
+						<button class="copy-id" size="mini" bindtap="copyzyid">复制</button>
+					</view>
+					<view class="mini-hint"><text class="tiny">完善资料以获得更精准的成长建议</text></view>
+				</view>
+			</view>
+				<achievement-toast id="achToast" />
+		</view>
+
+		<!-- 关键指标 4 ~ 6 个 -->
+	<view class="card key-metrics-card" wx:class="{{loading?'loading':''}}">
+			<text class="card-title">本周关键指标</text>
+			<view class="key-metrics">
+				<view class="km-item"><text class="k">自由指数</text><text class="v">{{freedomPercent}}%</text></view>
+				<view class="km-item"><text class="k">习惯</text><text class="v">{{habitCount}}</text></view>
+				<view class="km-item"><text class="k">番茄</text><text class="v">{{pomodoroCount}}</text></view>
+				<view class="km-item"><text class="k">技能</text><text class="v">{{skillCount}}</text></view>
+				<view class="km-item"><text class="k">最佳连续</text><text class="v">{{bestStreak}}</text></view>
+				<view class="km-item" wx:if="{{mood}}"><text class="k">今日心情</text><text class="v">{{mood}}</text></view>
+			</view>
+			<view class="trend-row">
+				<view class="trend-item">
+					<text class="ti-label">XP 7日</text>
+					<sparkline data="{{series.xp}}" cid="xp" color="#f59e0b" />
+				</view>
+				<view class="trend-item">
+					<text class="ti-label">习惯</text>
+					<sparkline data="{{series.habit}}" cid="hb" color="#10b981" />
+				</view>
+				<view class="trend-item">
+					<text class="ti-label">番茄</text>
+					<sparkline data="{{series.pomo}}" cid="pm" color="#3b82f6" />
+				</view>
+			</view>
+		</view>
+
+			<!-- 今日摘要 -->
+			<view class="card today-summary" wx:if="{{todaySummary}}">
+				<text class="card-title">今日摘要</text>
+				<view class="ts-line">{{todaySummary.sentence}}</view>
+				<view class="ts-grid">
+					<view class="ts-item"><text class="l">习惯数</text><text class="v">{{habitCount}}</text></view>
+					<view class="ts-item"><text class="l">番茄</text><text class="v">{{pomodoroCount}}</text></view>
+					<view class="ts-item"><text class="l">周运动差值</text><text class="v">{{todaySummary.sportGap}}</text></view>
+				</view>
+				<view class="ts-motiv" wx:if="{{todaySummary.motivation}}">{{todaySummary.motivation}}</view>
+			</view>
+
+		<!-- 快速入口 -->
+		<view class="card quick-links-card primary-nav">
+			<text class="card-title">快速入口</text>
+			<view class="quick-links">
+				<navigator url="/pages/finance/finance">财务仪表</navigator>
+				<navigator url="/pages/bill/bill">记账</navigator>
+				<navigator url="/pages/habit/habit">习惯</navigator>
+				<navigator url="/pages/todo/todo">待办</navigator>
+				<navigator url="/pages/diary/diary">日记</navigator>
+				<navigator url="/pages/sport/sport">运动</navigator>
+				<navigator url="/pages/skill/skill">技能</navigator>
+			</view>
+		</view>
+
+		<!-- 可折叠高级区块 -->
+		<view class="fold-toggle" bindtap="toggleAdvanced">{{ showAdvanced ? '收起附加模块 ▲' : '展开更多统计 ▼' }}</view>
+		<block wx:if="{{showAdvanced}}">
+			<view class="card growth-card">
+				<text class="card-title">财务与成长概览</text>
+				<view class="finance-progress-embed">
+					<view class="fp-head">财务进度</view>
+					  <progress-bar percent="{{Number(freedomPercent)}}" label="自由指数" deltaThreshold="10" />
+					<view class="my-metrics">
+						<view class="mm-item"><text>💼 净资产</text><text class="val">{{netWorth}}</text></view>
+						<view class="mm-item"><text>💤 年被动</text><text class="val">{{passiveYear}}</text></view>
+						<view class="mm-item"><text>💸 年支出</text><text class="val">{{expenseYear}}</text></view>
+						<view class="mm-item"><text>🎯 覆盖率</text><text class="val">{{freedomPercent}}%</text></view>
+					</view>
+					<text class="fi-target">{{freedomMsg}}</text>
+				</view>
+			</view>
+
+			<view class="card achievement-card">
+				<text class="card-title">{{i18n.achievementBadgesTitle}}</text>
+				<view class="badges">
+					<block wx:for="{{badges}}" wx:key="id">
+							<view class="badge {{item.locked?'locked':''}}" data-id="{{item.id}}" bindlongpress="onBadgeLongPress">{{item.icon}} {{item.name}}</view>
+					</block>
+				</view>
+				<text class="sub-note">{{i18n.achievementBadgesNote}}</text>
+				<view class="upcoming" wx:if="{{upcoming.length}}">
+					<text class="u-title">即将解锁</text>
+					<block wx:for="{{upcoming}}" wx:key="id">
+						<view class="u-item">
+							<text class="icon">{{item.icon}}</text>
+							<text class="nm">{{item.name_zh || item.name_en}}</text>
+							<view class="u-bar"><view class="fill" style="width:{{item.percent}}%"></view></view>
+							<text class="pct">{{item.percent}}%</text>
+						</view>
+					</block>
+				</view>
+			</view>
+
+			<view class="card weekly-quests" wx:if="{{weeklyQuests.length}}">
+				<text class="card-title">本周任务</text>
+				<view class="quests">
+					<block wx:for="{{weeklyQuests}}" wx:key="id">
+							<view class="q-item {{item.progress>=item.goal?'done':''}}">
+								<view class="q-check" wx:if="{{item.progress>=item.goal}}">✓</view>
+							<view class="q-meta">
+								<text class="q-title">{{item.title}}</text>
+								<text class="q-desc">{{item.desc}}</text>
+							</view>
+							<view class="q-bar"><view class="fill" style="width: {{ item.goal ? (item.progress*100/item.goal) : 0 }}%"></view></view>
+							<text class="q-progress">{{item.progress}} / {{item.goal}}</text>
+						</view>
+					</block>
+				</view>
+				<text class="sub-note">完成全部任务可获得额外 XP（即将上线）。</text>
+			</view>
+
+			<view class="card message-card" wx:if="{{messages.length}}">
+				<text class="card-title">最近消息</text>
+				<view class="messages">
+					<block wx:for="{{messages.slice(0,2)}}" wx:key="id">
+						<view class="msg-item"><text>{{item.text}}</text><text class="time">{{item.timeStr}}</text></view>
+					</block>
+				</view>
+				<text class="sub-note">仅展示最新 2 条。</text>
+			</view>
+
+			<view class="card settings-card">
+				<text class="card-title">基础设置</text>
+				<view class="form-row">
+					<text class="label">时间价值 (¥/小时)</text>
+					<input type="number" value="{{hourCostInput}}" bindinput="onHourCostInput" placeholder="100" />
+				</view>
+				<view class="form-row">
+					<text class="label">每周运动目标 (分钟)</text>
+					<input type="number" value="{{sportWeeklyTargetInput}}" bindinput="onSportWeeklyTargetInput" placeholder="150" />
+				</view>
+				<button class="btn primary full" bindtap="saveSettings">保存设置</button>
+				<text class="sub-note">这些设置用于 ROI 计算与健康目标。</text>
+			</view>
+
+			<view class="card tip-section">
+				<text class="card-title">说明</text>
+				<text class="sub-note">已精简首屏，更多指标折叠展示；后续将加入任务引导与趋势图。</text>
+			</view>
+		</block>
+	</view>
+</view>

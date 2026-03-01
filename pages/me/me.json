@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "我的",
+  "usingComponents": {
+    "progress-bar": "/components/progress-bar/progress-bar",
+  "achievement-toast": "/components/achievement-toast/achievement-toast",
+  "sparkline": "/components/sparkline/sparkline",
+  "xp-ring": "/components/xp-ring/xp-ring"
+  }
+}

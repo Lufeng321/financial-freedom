@@ -1,0 +1,5 @@
+.tabbar{position:fixed;left:0;right:0;bottom:0;height:128rpx;display:flex;align-items:center;justify-content:space-around;background:#ffffff;border-top:2rpx solid #e2e8f0;box-shadow:0 -16rpx 48rpx -16rpx rgba(0,0,0,.06);z-index:999;}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:24rpx;color:#666666;gap:8rpx;transition:transform .35s cubic-bezier(.34,1.56,.64,1),color .2s;}
+.tab-item .icon{font-size:44rpx;line-height:1;}
+.tab-item.bounce{transform:scale(1.15);}
+.tab-item:active{transform:scale(.9);} /* 备用轻按态 */

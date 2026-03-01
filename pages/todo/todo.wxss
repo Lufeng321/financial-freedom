@@ -1,0 +1,28 @@
+@import "../../styles/common.wxss";
+/* todo 页面补充或覆盖 */
+.content{padding:0 32rpx 32rpx;}
+.item-main{flex:1;display:flex;align-items:center;flex-wrap:wrap;gap:12rpx;}
+.tag-label{background:#eef;}
+.toolbar{display:flex;flex-wrap:wrap;gap:16rpx;margin-bottom:24rpx;align-items:center;}
+.tool-pill{padding:12rpx 20rpx;background:#f1f5f9;border-radius:16rpx;}
+.search{flex:1;min-width:200rpx;padding:16rpx 24rpx;border:2rpx solid var(--border);border-radius:20rpx;background:#fff;}
+.due{font-size:22rpx;color:var(--sub);}
+.empty-note{padding:40rpx 0;text-align:center;color:var(--sub);}
+/* 新增统计与进度条 */
+.stats-line{display:flex;align-items:center;gap:16rpx;margin:8rpx 0 20rpx;font-size:24rpx;color:var(--sub);}
+.progress-bar{flex:1;height:16rpx;background:#edf0f5;border-radius:12rpx;overflow:hidden;position:relative;}
+.progress-bar .inner{height:100%;background:linear-gradient(90deg,#4f8ef7,#6cc6ff);}
+.rate{width:80rpx;text-align:right;}
+/* 状态旗标 */
+.flag{padding:4rpx 12rpx;border-radius:12rpx;font-size:20rpx;line-height:1;background:#eee;color:#555;}
+.flag-overdue{background:#ffe4e4;color:#d12b2b;}
+.flag-today{background:#fff4d6;color:#c26a00;}
+.flag-soon{background:#e6f5ff;color:#0a6ebd;}
+.flag-lever{background:#e9f7ec;color:#1f7a31;}
+/* item 状态着色 */
+.todo-item.overdue .title{color:#d12b2b;}
+.todo-item.today:not(.done) .title{color:#c26a00;}
+.todo-item.focus:not(.done) .title{text-decoration:underline;}
+.todo-item.done .title{text-decoration:line-through;color:var(--sub);}
+/* 额外按钮风格 */
+.btn.ghost{background:#fff;border:2rpx solid var(--border);}

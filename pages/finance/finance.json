@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "财务自由仪表盘",
+  "usingComponents": {
+    "app-fab": "/components/fab/fab"
+  }
+}

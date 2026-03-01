@@ -1,0 +1,48 @@
+<view class="qc-mask" wx:if="{{show}}" catch:touchmove="noop" bindtap="close">
+  <view class="qc-panel" catch:tap="noop">
+    <view class="qc-head">
+      <text class="title">快速录入</text>
+      <view class="close" bindtap="close">×</view>
+    </view>
+    <view class="qc-tabs">
+      <block wx:for="{{tabs}}" wx:key="id">
+        <view class="qc-tab {{currentTab===item.id?'active':''}}" data-id="{{item.id}}" bindtap="switchTab">{{item.name}}</view>
+      </block>
+    </view>
+    <!-- 记账 -->
+    <view wx:if="{{currentTab==='bill'}}" class="qc-body">
+      <input placeholder="金额" type="number" bindinput="onInput" data-field="billAmount" value="{{billAmount}}" />
+      <picker mode="selector" range="{{billKinds}}" bindchange="pickBillKind">
+        <view class="picker">{{billKindLabel}}</view>
+      </picker>
+      <button size="mini" bindtap="submitBill" class="primary">保存</button>
+    </view>
+    <!-- 习惯打卡 -->
+    <view wx:if="{{currentTab==='habit'}}" class="qc-body">
+      <picker mode="selector" range="{{habitNames}}" bindchange="pickHabit">
+        <view class="picker">{{habitPickLabel}}</view>
+      </picker>
+      <button size="mini" bindtap="submitHabit" class="primary" disabled="{{!habitSelectedId}}">打卡</button>
+    </view>
+    <!-- 番茄 -->
+    <view wx:if="{{currentTab==='pomo'}}" class="qc-body">
+      <picker mode="selector" range="{{pomoDurations}}" bindchange="pickPomo">
+        <view class="picker">{{pomoPickLabel}}</view>
+      </picker>
+      <button size="mini" bindtap="startPomo" class="primary">开始</button>
+    </view>
+    <!-- 资产简录 -->
+    <view wx:if="{{currentTab==='asset'}}" class="qc-body">
+      <input placeholder="资产名称" bindinput="onInput" data-field="assetName" value="{{assetName}}" />
+      <input placeholder="金额" type="number" bindinput="onInput" data-field="assetAmount" value="{{assetAmount}}" />
+      <button size="mini" bindtap="submitAsset" class="primary">保存</button>
+    </view>
+    <!-- 技能练习 -->
+    <view wx:if="{{currentTab==='skill'}}" class="qc-body">
+      <picker mode="selector" range="{{skillNames}}" bindchange="pickSkill">
+        <view class="picker">{{skillPickLabel}}</view>
+      </picker>
+      <button size="mini" bindtap="submitSkillPractice" class="primary" disabled="{{!skillSelectedId}}">+20 XP</button>
+    </view>
+  </view>
+</view>

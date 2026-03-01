@@ -1,0 +1,427 @@
+<view class="pg-page">
+	<view class="header">
+		<view class="date-block">
+			<text class="date">{{todayDate}}</text>
+			<text class="weekday">{{weekday}}</text>
+		</view>
+		<view class="greeting">{{greeting}}💪</view>
+		<view class="msg-entry" bindtap="goMessages">
+			<t-icon name="messages" size="28" />
+			<view class="msg-badge" wx:if="{{unreadCount>0}}">{{unreadDisplay}}</view>
+		</view>
+	</view>
+
+	<view class="cards">
+		<!-- 概览卡（成长指数 + 关键指标） -->
+		<view class="overview-card">
+			<view class="ov-left" bindtap="openGrowthBreak">
+				<text class="ov-title">成长进展</text>
+				<view class="ov-ring">
+					<view class="ov-ring-outer">
+						<view class="ov-ring-fill" style="background:conic-gradient(#2563eb {{dashGrowthScore}}%, #e5e7eb {{dashGrowthScore}}%);"></view>
+						<view class="ov-ring-inner">{{dashGrowthScore}}%</view>
+					</view>
+				</view>
+			</view>
+			<view class="ov-metrics">
+				<block wx:for="{{overviewMetrics}}" wx:key="key">
+					<view class="ov-m-item {{highlightSummaryKeys.indexOf(item.key)>-1?'highlight':''}}" data-key="{{item.key}}" bindtap="tapSummaryMetric">
+						<text class="ov-lab">{{item.label}}</text>
+						<text class="ov-val">{{item.value}}<text class="ov-unit">{{item.unit}}</text></text>
+					</view>
+				</block>
+			</view>
+		</view>
+		<!-- 精简版洞察卡：合并 复利引擎 / 机会 / 事件 摘要 -->
+		<view class="insights-card" wx:if="{{engineMetrics.length || prioritySuggestion || dayDiff.length}}">
+			<view class="ins-row top">
+				<view class="block left">
+					<view class="line"><text class="ins-title">复利引擎</text><text class="ins-badge" wx:if="{{xpMultiplier>1}}">x{{xpMultiplier}}</text></view>
+					<view class="line vel" wx:if="{{velocity}}" bindtap="tapVelocity">
+						<text class="lab">动能</text><text class="val" style="color: {{velocityColor}};">{{velocity.percent}}%</text>
+						<text class="eta" wx:if="{{velocity.eta}}">{{velocity.eta}}</text>
+					</view>
+					<view class="line" wx:if="{{compoundScore!=null}}"><text class="lab">复合</text><text class="val">{{compoundScore}}</text></view>
+				</view>
+				<view class="block mid" wx:if="{{prioritySuggestion}}" bindtap="goPrioritySuggestion">
+					<text class="ps-main">{{prioritySuggestion.title}}</text>
+					<text class="ps-desc">{{prioritySuggestion.desc}}</text>
+				</view>
+				<view class="block stage" wx:if="{{stageStrategy}}">
+					<text class="stage-label">{{stageStrategy.label}}</text>
+				</view>
+			</view>
+			<view class="diff-chips" wx:if="{{dayDiff.length}}">
+				<block wx:for="{{dayDiff.slice(0,3)}}" wx:key="key">
+					<text class="diff-chip {{item.trend}}">{{item.label}} {{item.diff>0?'+':''}}{{item.diff}}{{item.unit}}</text>
+				</block>
+			</view>
+			<view class="recent-mini" wx:if="{{recentEvents.length}}">
+				<block wx:for="{{recentEvents.slice(0,2)}}" wx:key="ts">
+					<text class="mini-ev">· {{item.desc}}</text>
+				</block>
+			</view>
+			<view class="xp-criteria mini" wx:if="{{xpMultiplier>1}}">
+				<block wx:for="{{['专注','储蓄','习惯','健康','技能']}}" wx:key="*this">
+					<text class="xc-crit">{{item}}</text>
+				</block>
+			</view>
+		</view>
+		<!-- 快速操作入口（动态排序 Top4） -->
+		<view class="quick-action-bar" wx:if="{{!newUserSimpleMode}}">
+			<block wx:for="{{quickActions}}" wx:key="key">
+				<button size="mini" class="qa-btn" data-key="{{item.key}}" bindtap="tapQuickAction">{{item.label}}</button>
+			</block>
+		</view>
+		<!-- 激活引导（未完成时显示） -->
+		<view class="activation" wx:if="{{!activationAllDone}}">
+			<view class="act-head">
+				<text class="act-title">新手激活进度</text>
+				<text class="act-progress">{{activationProgress}}%</text>
+			</view>
+			<view class="act-bar">
+				<view class="act-bar-fill" style="width: {{activationProgress}}%;"></view>
+			</view>
+			<view class="act-steps">
+				<block wx:for="{{activationSteps}}" wx:key="key">
+					<view class="act-step {{item.done?'done':''}}" data-go="{{item.go}}" bindtap="goAction">
+						<view class="left">
+							<view class="chk">{{item.done?'✓':''}}</view>
+							<view class="txts">
+								<text class="st-main">{{item.title}}</text>
+								<text class="st-desc">{{item.desc}}</text>
+							</view>
+						</view>
+						<view class="act-cta" wx:if="{{!item.done}}">{{item.cta}}</view>
+					</view>
+				</block>
+			</view>
+		</view>
+		<!-- 今日行动列表 (增强：类型标签 + 快速完成按钮) -->
+		<view class="today-actions" wx:if="{{todayActionList.length}}">
+			<view class="ta-head"><text class="ta-title">今日建议行动</text></view>
+			<block wx:for="{{todayActionList}}" wx:key="id">
+				<view class="ta-row">
+					<view class="ta-texts" bindtap="goAction" data-go="{{item.go}}" data-id="{{item.id}}">
+						<text class="ta-main">
+							<text class="act-type-tag type-{{item.type}}">{{item.typeLabel}}</text>{{item.title}}
+						</text>
+					</view>
+					<view class="ta-cta" wx:if="{{!item.completed}}" bindtap="completeAction" data-id="{{item.id}}">{{item.quickDone?'完成':'去处理'}}</view>
+					<view class="ta-cta done" wx:if="{{item.completed}}">已完成</view>
+				</view>
+			</block>
+		</view>
+		<view class="today-actions empty-actions" wx:if="{{!todayActionList.length}}">
+			<text class="ta-empty">暂无推荐行动，继续保持！</text>
+		</view>
+
+		<!-- 展开更多（延后渲染非首屏模块） -->
+		<view wx:if="{{!showFullDashboard}}" class="more-entry">
+			<button size="mini" class="ql-btn" bindtap="expandFullDashboard">查看更多指标 / 执行区</button>
+		</view>
+
+		<block wx:if="{{showFullDashboard}}">
+		<!-- 快速链接 & 指标折叠 -->
+		<view class="quick-links">
+			<button size="mini" class="ql-btn" bindtap="goWeeklyReview">周/月回顾</button>
+			<button size="mini" class="ql-btn" wx:if="{{metricsCollapsed}}" bindtap="expandMetrics">核心指标</button>
+			<button size="mini" class="ql-btn" wx:if="{{!metricsCollapsed}}" bindtap="collapseMetrics">收起核心</button>
+			<button size="mini" class="ql-btn" wx:if="{{extendedCollapsed}}" bindtap="expandExtended">展开扩展</button>
+			<button size="mini" class="ql-btn" wx:if="{{!extendedCollapsed}}" bindtap="collapseExtended">收起扩展</button>
+		</view>
+		<!-- 核心指标区 -->
+		<view class="dash-grid" wx:if="{{!metricsCollapsed}}">
+			<block wx:for="{{coreDashRender}}" wx:key="*this">
+				<view class="dash-card {{recommendedDashKey==item?'recommended':''}}" data-key="{{item}}" data-type="{{item}}" bindtap="tapDashCard">
+					<view class="info-icon" catchtap="openMetricInfo" data-type="{{item}}">i</view>
+					<block wx:if="{{item==='fi'}}">
+						<view class="fi-head-row"><text class="d-title">FI 进度</text><text class="mini-link" catchtap="openPassiveSim">模拟</text></view>
+						<text class="d-value" wx:if="{{dashFiProgress!=null}}">{{dashFiProgress}}%</text>
+						<view class="skeleton sm" wx:if="{{dashFiProgress==null}}" />
+						<text class="warn-mini" wx:if="{{staleFinance}}">⚠ 数据可能过期</text>
+						<button size="mini" class="core-cta" data-type="fi" bindtap="coreCardCTA" catchtap="coreCardCTA">更新数据</button>
+					</block>
+					<block wx:elif="{{item==='goal'}}">
+						<text class="d-title">目标进度</text>
+						<view class="goal-lines">
+							<view class="g-line"><text class="g-lab">应急</text><view class="g-bar"><view class="g-fill" style="width: {{goalEmergencyPct}}%;"></view></view><text class="g-val">{{goalEmergencyPct}}%</text></view>
+							<view class="g-line"><text class="g-lab">被动</text><view class="g-bar"><view class="g-fill passive" style="width: {{goalPassivePct}}%;"></view></view><text class="g-val">{{goalPassivePct}}%</text></view>
+							<view class="g-line"><text class="g-lab">储蓄</text><view class="g-bar"><view class="g-fill savings" style="width: {{goalSavingsPct}}%;"></view></view><text class="g-val">{{goalSavingsPct}}%</text></view>
+						</view>
+						<text class="d-sub" wx:if="{{goalPassiveETA}}">FI ETA {{goalPassiveETA}}</text>
+						<button size="mini" class="core-cta" data-type="goal" bindtap="coreCardCTA" catchtap="coreCardCTA">+ 新目标</button>
+					</block>
+					<block wx:elif="{{item==='focus'}}">
+						<text class="d-title">专注小时</text>
+						<text class="d-value">{{dashFocusHours}}</text>
+						<text class="d-sub">今日累计</text>
+						<button size="mini" class="core-cta" data-type="focus" bindtap="coreCardCTA" catchtap="coreCardCTA">开始番茄</button>
+					</block>
+				</view>
+			</block>
+		</view>
+		<!-- 扩展指标区 -->
+		<view class="dash-grid" wx:if="{{!extendedCollapsed}}" bindlongpress="enterReorder">
+			<block wx:for="{{extendedDashRender}}" wx:key="*this">
+				<view class="dash-card {{item=='roi'?'wider':''}} {{recommendedDashKey==item?'recommended':''}}" data-key="{{item}}" bindtap="tapDashCard" data-type="{{item}}">
+					<view class="info-icon" catchtap="openMetricInfo" data-type="{{item}}">i</view>
+					<block wx:if="{{item==='fi'}}">
+						<view class="fi-head-row"><text class="d-title">FI 进度</text><text class="mini-link" catchtap="openPassiveSim">模拟</text></view>
+						<text class="d-value" wx:if="{{dashFiProgress!=null}}">{{dashFiProgress}}%</text>
+						<view class="skeleton sm" wx:if="{{dashFiProgress==null}}" />
+						<text class="d-sub">目标:100%</text>
+					</block>
+					<block wx:elif="{{item==='goal'}}">
+						<text class="d-title">目标进度</text>
+						<view class="goal-lines">
+							<view class="g-line"><text class="g-lab">应急</text><view class="g-bar"><view class="g-fill" style="width: {{goalEmergencyPct}}%;"></view></view><text class="g-val">{{goalEmergencyPct}}%</text></view>
+							<view class="g-line"><text class="g-lab">被动</text><view class="g-bar"><view class="g-fill passive" style="width: {{goalPassivePct}}%;"></view></view><text class="g-val">{{goalPassivePct}}%</text></view>
+							<view class="g-line"><text class="g-lab">储蓄</text><view class="g-bar"><view class="g-fill savings" style="width: {{goalSavingsPct}}%;"></view></view><text class="g-val">{{goalSavingsPct}}%</text></view>
+						</view>
+						<text class="d-sub" wx:if="{{goalPassiveETA}}">FI ETA {{goalPassiveETA}}</text>
+					</block>
+					<block wx:elif="{{item==='budget'}}">
+						<text class="d-title">本月预算</text>
+						<view class="budget-mini-bar">
+							<view class="bm-track">
+								<view class="bm-fill {{budgetState}}" style="width: {{budgetPct}}%;"></view>
+							</view>
+							<text class="bm-text">{{budgetPct}}%</text>
+						</view>
+						<text class="d-sub">已用 {{budgetUsed}}</text>
+					</block>
+					<block wx:elif="{{item==='savings'}}">
+						<text class="d-title">储蓄率</text>
+						<text class="d-value" wx:if="{{dashSavingsRate!=null}}">{{dashSavingsRate}}%</text>
+						<view class="skeleton sm" wx:if="{{dashSavingsRate==null}}" />
+						<text class="d-sub">月度</text>
+					</block>
+					<block wx:elif="{{item==='focus'}}">
+						<text class="d-title">专注小时</text>
+						<text class="d-value">{{dashFocusHours}}</text>
+						<text class="d-sub">今日累计</text>
+					</block>
+					<block wx:elif="{{item==='roi'}}">
+						<view bindtap="goSkill">
+							<text class="d-title">技能 ROI Top3</text>
+							<text class="warn-mini" wx:if="{{staleSkill}}">⚠ 练习稀少</text>
+							<view class="roi-list" wx:if="{{dashSkillROI.length}}">
+								<block wx:for="{{dashSkillROI}}" wx:key="name">
+									<view class="roi-row"><text class="r-name">{{item.name}}<text wx:if="{{item.confidencePct!=null && item.confidence<1}}" class="conf-d">↓{{item.confidencePct}}%</text></text><text class="r-roi">{{item.roiPercent}}%</text></view>
+								</block>
+							</view>
+							<view class="empty" wx:if="{{!dashSkillROI.length}}">暂无数据</view>
+						</view>
+					</block>
+					<block wx:elif="{{item==='habit'}}">
+						<text class="d-title">习惯保持率</text>
+						<text class="d-value">{{habitConsistencyPercent!=null?habitConsistencyPercent:'--'}}%</text>
+						<text class="d-sub">近7日</text>
+					</block>
+					<block wx:elif="{{item==='lever'}}">
+						<text class="d-title">杠杆完成</text>
+						<text class="d-value">{{dashLeverCompleted}}</text>
+						<text class="d-sub">XP +{{dashLeverBonus}}</text>
+					</block>
+					<block wx:elif="{{item==='health'}}">
+						<text class="d-title">健康达标</text>
+						<view class="health-bar">
+							<view class="hb-track">
+								<view class="hb-fill" style="width: {{dashHealthPercent}}%; background: {{dashHealthColor}};"></view>
+							</view>
+							<text class="hb-text">{{dashHealthPercent}}%</text>
+						</view>
+						<text class="d-sub">本周</text>
+					</block>
+					<block wx:elif="{{item==='extra'}}"></block>
+					<view class="reorder-hint" wx:if="{{dashReorder}}">
+						<button size="mini" class="mv-btn" data-key="{{item}}" data-dir="-1" bindtap="moveCard">↑</button>
+						<button size="mini" class="mv-btn" data-key="{{item}}" data-dir="1" bindtap="moveCard">↓</button>
+					</view>
+				</view>
+			</block>
+		</view>
+		<view class="reorder-toolbar" wx:if="{{dashReorder}}">
+			<button class="btn small" bindtap="exitReorder">完成</button>
+			<text class="tip">↑↓ 排序 · 切换显示开关</text>
+		</view>
+		<view class="display-panel" wx:if="{{dashReorder}}">
+			<block wx:for="{{allDashKeys}}" wx:key="*this">
+				<view class="disp-row">
+					<text class="dname">{{item}}</text>
+					<switch checked="{{dashDisplay[item]}}" data-key="{{item}}" bindchange="toggleCardDisplay" />
+				</view>
+			</block>
+		</view>
+
+		<!-- 执行力分区 -->
+		<view class="section-title" wx:if="{{!extendedCollapsed}}">执行力</view>
+		<!-- 今日焦点 -->
+		<view class="card exec-card" wx:if="{{!extendedCollapsed}}">
+			<view class="card-head">
+				<text class="card-title">今日焦点</text>
+				<text class="link" bind:tap="goTodo">管理</text>
+			</view>
+			<view class="focus-list">
+				<block wx:for="{{focusList}}" wx:key="id">
+					<view class="todo-row {{item.done?'done':''}} ani-fade" bind:tap="toggleFocusDone" data-id="{{item.id}}">
+						<view class="left">
+							<t-checkbox checked="{{item.done}}" shape="round" />
+							<t-icon name="{{item.priorityIcon}}" size="20" class="pri-icon pri-{{item.priority}}" />
+							<text class="title">{{item.title}}</text>
+						</view>
+						<t-tag size="small" theme="primary" wx:if="{{item.focus}}">焦点</t-tag>
+					</view>
+				</block>
+				<view class="empty" wx:if="{{!focusList.length}}">暂无焦点任务</view>
+			</view>
+		</view>
+
+		<!-- 习惯打卡 -->
+		<view class="card habit-card exec-card" wx:if="{{!extendedCollapsed}}">
+			<view class="card-head">
+				<text class="card-title">习惯打卡</text>
+				<text class="link" bind:tap="goHabit">管理</text>
+			</view>
+			<scroll-view class="habit-scroll" scroll-x>
+				<view class="habit-item ani-pop" wx:for="{{habits}}" wx:key="id">
+					<view class="habit-icon-wrapper">
+						<t-icon name="check-circle-filled" size="28" class="habit-icon {{item.todayDone?'done':''}}" />
+					</view>
+					<view class="habit-content">
+						<text class="name">{{item.name}}</text>
+						<t-button size="small" variant="outline" theme="success" data-id="{{item.id}}" disabled="{{item.todayDone}}" bind:tap="tapHabit">
+							{{item.todayDone?'已打卡':'打卡'}}
+						</t-button>
+					</view>
+				</view>
+			</scroll-view>
+		</view>
+
+		<!-- 财务自由指数 mini -->
+		<view class="card freedom exec-card" wx:if="{{!extendedCollapsed}}">
+			<view class="card-head">
+				<text class="card-title">财务自由指数</text>
+				<text class="percent {{finance.freedom>=100?'full':''}}">{{finance.freedom}}%</text>
+			</view>
+			<view class="fi-bar">
+				<view class="bar-track">
+					<view class="bar-fill ani-grow" style="width: {{freedomWidth}};"></view>
+				</view>
+				<view class="fi-metrics">
+					<view class="m-item"><text class="label">被动/日</text><text class="val">{{finance.dayPassive}}</text></view>
+					<view class="m-item"><text class="label">支出/日</text><text class="val">{{finance.dayExpense}}</text></view>
+				</view>
+			</view>
+		</view>
+
+		<!-- 运动概览 -->
+		<view class="card exec-card" wx:if="{{!extendedCollapsed}}">
+			<view class="card-head">
+				<text class="card-title">运动概览</text>
+				<text class="link" bind:tap="goSport">更多</text>
+			</view>
+			<view class="sport-summary">
+				<view class="metric"><text class="num">{{sport.time}}</text><text class="lab">分钟</text></view>
+				<view class="metric"><text class="num">{{sport.distance}}</text><text class="lab">KM</text></view>
+				<view class="metric"><text class="num">{{sport.cal}}</text><text class="lab">KCAL</text></view>
+				<view class="circle">
+					<view class="outer spin-in" style="background: {{progressStyle}};">
+						<view class="inner">{{sport.percent}}%</view>
+					</view>
+					<text class="circle-lab">今日完成</text>
+				</view>
+			</view>
+		</view>
+		</block>
+	</view>
+
+	<app-fab bind:quickcapture="openQuickCapture" />
+	<quick-capture id="qc" show="{{showQuickCapture}}" bind:record="refresh" bind:close="onQuickCaptureClose" />
+
+	<!-- 行动完成合成反馈条 -->
+	<view class="action-feedback-bar" wx:if="{{showActionFeedback}}" catchtap="hideActionFeedback">
+		<text>本次：{{lastActionFeedbackText}}</text>
+	</view>
+
+	<!-- 激活解锁弹层 -->
+	<view class="unlock-mask" wx:if="{{showUnlock}}" bindtap="closeUnlock">
+		<view class="unlock-dialog" catchtap="noop">
+			<text class="uk-title">🎉 激活完成</text>
+			<text class="uk-desc">已解锁更多指标：{{unlockMetricsText}}</text>
+			<button size="mini" class="uk-btn" bindtap="goGrowthDetail">查看成长建议</button>
+			<button size="mini" class="uk-btn secondary" bindtap="closeUnlock">知道了</button>
+		</view>
+	</view>
+
+	<view class="metric-info-mask" wx:if="{{showMetricInfo}}" bindtap="closeMetricInfo">
+		<view class="metric-info-dialog" catchtap="noop">
+			<text class="mi-title">{{metricInfoContent.title}}</text>
+			<text class="mi-desc">{{metricInfoContent.desc}}</text>
+			<text class="mi-formula" wx:if="{{metricInfoContent.formula}}">公式：{{metricInfoContent.formula}}</text>
+			<view class="mi-improve" wx:if="{{metricInfoContent.improve}}">
+				<text class="mi-sub">提升路径：</text>
+				<block wx:for="{{metricInfoContent.improve}}" wx:key="*this">
+					<text class="mi-chip">{{item}}</text>
+				</block>
+			</view>
+			<view class="mi-actions">
+				<block wx:for="{{metricInfoContent.actions}}" wx:key="index">
+					<view class="mi-action" bindtap="metricQuickAction" data-idx="{{index}}">· {{item.label}}</view>
+				</block>
+			</view>
+			<button size="mini" bindtap="closeMetricInfo" class="mi-btn">知道了</button>
+		</view>
+	</view>
+
+	<!-- 指标首次引导 Tooltip 容器 -->
+	<block wx:if="{{activeMetricTooltip}}">
+		<view class="metric-tooltip-mask" catchtap="hideMetricTooltip">
+			<view class="metric-tooltip" style="top: {{metricTooltipPos.top}}px; left: {{metricTooltipPos.left}}px;">
+				<text class="mt-title">{{metricTooltipContent.title}}</text>
+				<text class="mt-desc">{{metricTooltipContent.desc}}</text>
+				<view class="mt-actions" wx:if="{{metricTooltipContent.actions && metricTooltipContent.actions.length}}">
+					<block wx:for="{{metricTooltipContent.actions}}" wx:key="index">
+						<button size="mini" class="mt-btn" data-idx="{{index}}" bindtap="metricTooltipAction">{{item.label}}</button>
+					</block>
+				</view>
+				<view class="mt-step">{{metricTooltipStep}} / {{metricTooltipTotal}}</view>
+				<view class="mt-actions-row">
+					<button size="mini" class="mt-next" bindtap="nextMetricTooltip">{{metricTooltipStep==metricTooltipTotal?'完成':'下一条'}}</button>
+					<button size="mini" class="mt-skip" bindtap="skipMetricTooltips">跳过</button>
+				</view>
+			</view>
+		</view>
+	</block>
+
+	<!-- Velocity 说明弹层 -->
+	<view class="vel-info-mask" wx:if="{{showVelocityInfo}}" bindtap="closeVelocityInfo">
+		<view class="vel-info-dialog" catchtap="noop">
+			<text class="vel-info-title">动能 (Velocity)</text>
+			<text class="vel-info-desc">基于最近月度被动收入增量估算当前进展速度。绿色代表达到或超过 24 个月完成路径所需平均速度；橙色表示接近；红色提示需要提升储蓄率、技能增值或被动资产。</text>
+			<text class="vel-info-formula">公式简化：velocity = avgMonthlyPassiveDelta / (remaining / 24)</text>
+			<text class="vel-info-hint">提升方式：增加储蓄率、提升技能年化增值、增加可产生被动收益的资产、优化支出。</text>
+			<button size="mini" bindtap="closeVelocityInfo" class="vel-info-btn">知道了</button>
+		</view>
+	</view>
+
+	<!-- Growth Breakdown 弹层 -->
+	<view class="gb-mask" wx:if="{{showGrowthBreak}}" bindtap="closeGrowthBreak">
+		<view class="gb-panel" catchtap="noop">
+			<text class="gb-title">成长得分拆解</text>
+			<view class="gb-list">
+				<block wx:for="{{growthBreakItems}}" wx:key="key">
+					<view class="gb-row">
+						<text class="gb-name">{{item.label}}</text>
+						<view class="gb-bar"><view class="gb-fill" style="width: {{item.val}}%;"></view></view>
+						<text class="gb-val">{{item.val}}%</text>
+					</view>
+				</block>
+			</view>
+			<view class="gb-penalty">平衡系数 {{growthBalancePenaltyPct}}%</view>
+			<view class="gb-tip">保持核心维度差距不要过大，可提升系数。</view>
+			<button size="mini" bindtap="closeGrowthBreak" class="gb-btn">关闭</button>
+		</view>
+	</view>
+</view>

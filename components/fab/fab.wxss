@@ -1,0 +1,13 @@
+.fab{position:fixed;right:18px;bottom:92px;z-index:500;}
+.fab-main{width:60px;height:60px;border-radius:50%;background:#3366ff;color:#fff;font-size:34px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px -4px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s;}
+.fab-main.open{transform:rotate(45deg);}
+.fab-actions{position:absolute;bottom:70px;right:0;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
+.fab-actions.show{pointer-events:auto;animation:fadeIn .25s ease forwards;}
+.fab-actions.hide{opacity:0;height:0;overflow:hidden;}
+.fab-btn{background:#fff;padding:8px 14px;border-radius:20px;box-shadow:0 4px 12px -4px rgba(0,0,0,.25);font-size:12px;opacity:0;transform:translateY(6px) scale(.95);animation:pop .25s ease forwards;} 
+.fab-btn:nth-child(1){animation-delay:.03s;}
+.fab-btn:nth-child(2){animation-delay:.07s;}
+.fab-btn:nth-child(3){animation-delay:.11s;}
+.fab-btn:nth-child(4){animation-delay:.15s;}
+@keyframes pop{to{opacity:1;transform:translateY(0) scale(1);} }
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);} }

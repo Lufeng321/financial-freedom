@@ -1,0 +1,54 @@
+<view class="page budget-page">
+  <view class="header">
+    <text class="title">本月预算</text>
+    <view class="month-pick">
+      <picker mode="date" fields="month" value="{{month}}" bindchange="changeMonth">
+        <view class="pick-display">{{month}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="card total-budget">
+    <view class="row">
+      <text class="lab">总预算(支出)</text>
+      <input class="val-input" type="number" value="{{form.expenseBudget}}" placeholder="0" bindinput="inputBudget" data-field="expenseBudget" />
+    </view>
+    <view class="progress">
+      <view class="track">
+        <view class="fill {{progressState}}" style="width: {{progressPct}}%;"></view>
+      </view>
+      <view class="numbers">
+        <text>已用 {{usedAmount}}</text>
+        <text>{{progressPct}}%</text>
+      </view>
+    </view>
+    <view class="tips" wx:if="{{progressState==='warn'}}">已超过 80% 注意控制</view>
+    <view class="tips danger" wx:if="{{progressState==='danger'}}">已超出预算！</view>
+    <button class="save-btn" size="mini" bindtap="saveBudget">保存预算</button>
+  </view>
+
+  <view class="card cat-budget" wx:if="{{showCategoryBudgets}}">
+    <view class="card-head">
+      <text class="sub-title">分类预算 (可选)</text>
+      <button size="mini" bindtap="toggleCatBudgets">{{showCatEdit? '完成' : '编辑'}}</button>
+    </view>
+    <block wx:if="{{!catBudgets.length}}"><text class="empty">暂无分类预算</text></block>
+    <block wx:for="{{catBudgets}}" wx:key="cat">
+      <view class="cat-row">
+        <text class="c-name">{{item.cat}}</text>
+        <block wx:if="{{showCatEdit}}">
+          <input class="c-input" type="number" value="{{item.amount}}" data-cat="{{item.cat}}" bindinput="editCatAmount" />
+        </block>
+        <block wx:else>
+          <text class="c-amount">{{item.amount||'-'}}</text>
+        </block>
+      </view>
+    </block>
+    <view class="add-row" wx:if="{{showCatEdit}}">
+      <input placeholder="分类名" value="{{newCatName}}" bindinput="onNewCatName" />
+      <input placeholder="金额" type="number" value="{{newCatAmount}}" bindinput="onNewCatAmount" />
+      <button size="mini" bindtap="addCatBudget">添加</button>
+    </view>
+  </view>
+
+</view>

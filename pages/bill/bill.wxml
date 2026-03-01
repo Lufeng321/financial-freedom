@@ -1,0 +1,284 @@
+<view class="page bill-page">
+    <view class="app-header">
+		<text class="h1">记账</text>
+	</view>
+	<view class="content">
+		<!-- 表单卡片 -->
+		<view class="card bill-form">
+			<view class="card-title">新增收支记录</view>
+			<view class="template-shortcuts" wx:if="{{templateShortcuts.length}}">
+				<text class="tip">模板:</text>
+				<block wx:for="{{templateShortcuts}}" wx:key="templateId">
+					<view class="tpl-btn" data-id="{{item.templateId}}" bindtap="useTemplate">{{item.category}}{{item.amount}}</view>
+				</block>
+			</view>
+			<!-- 收支类型 -->
+			<view class="form-item">
+				<text class="label">收支类型</text>
+				<view class="seg" >
+					<view class="seg-item {{form.kind==='out'?'active':''}}" data-v="out" bindtap="tapKind">支出</view>
+					<view class="seg-item {{form.kind==='in'?'active':''}}" data-v="in" bindtap="tapKind">收入</view>
+				</view>
+			</view>
+			<!-- 收入性质 / 支出类型 -->
+			<view class="form-item" wx:if="{{form.kind==='in'}}">
+				<text class="label">收入性质</text>
+				<picker mode="selector" range="{{incomeTypeOptions}}" value="{{form.incomeTypeIndex}}" bindchange="pickIncomeType">
+					<view class="picker">{{incomeTypeLabel}}</view>
+				</picker>
+			</view>
+			<view class="form-item" wx:if="{{form.kind==='out'}}">
+				<text class="label">支出类型</text>
+				<picker mode="selector" range="{{expenseTypeOptions}}" value="{{form.expenseTypeIndex}}" bindchange="pickExpenseType">
+					<view class="picker">{{expenseTypeLabel}}</view>
+				</picker>
+			</view>
+			<!-- 分类 -->
+			<view class="form-item">
+				<text class="label">分类</text>
+				<picker mode="selector" range="{{categories}}" value="{{form.categoryIndex}}" bindchange="pickCategory">
+					<view class="picker">{{form.category || '请选择分类'}}</view>
+				</picker>
+			</view>
+			<!-- 金额 -->
+			<view class="form-item">
+				<text class="label">金额</text>
+				<input type="digit" placeholder="0.00" value="{{form.amount}}" data-field="amount" bindinput="inputField" bindfocus="focusAmount" />
+				<view class="quick-row" wx:if="{{quickAmounts.length}}">
+					<text class="q-label">常用:</text>
+					<block wx:for="{{quickAmounts}}" wx:key="*this"><view class="q-btn" data-v="{{item}}" bindtap="chooseQuickAmount">{{item}}</view></block>
+				</view>
+				<view class="quick-row" wx:if="{{recentCategories.length}}">
+					<text class="q-label">最近分类:</text>
+					<block wx:for="{{recentCategories}}" wx:key="*this"><view class="q-btn cat" data-v="{{item}}" bindtap="chooseRecentCategory">{{item}}</view></block>
+				</view>
+			</view>
+			<!-- 币种 -->
+			<view class="form-item">
+				<text class="label">币种</text>
+				<picker mode="selector" range="{{currencyOptions}}" value="{{form.currencyIndex}}" bindchange="pickCurrency">
+					<view class="picker">{{currencyLabel}}</view>
+				</picker>
+			</view>
+			<!-- 日期时间 -->
+			<view class="form-item inline-date">
+				<text class="label">日期时间</text>
+				<view class="dt-row">
+					<picker mode="date" value="{{form.date}}" bindchange="pickDate"><view class="picker small">{{form.date}}</view></picker>
+					<picker mode="time" value="{{form.time}}" bindchange="pickTime"><view class="picker small">{{form.time}}</view></picker>
+					<button class="btn now-btn" type="button" bindtap="now">现在</button>
+				</view>
+			</view>
+			<!-- 备注 -->
+			<view class="form-item">
+				<text class="label">备注</text>
+				<input placeholder="可留空" value="{{form.remark}}" data-field="remark" bindinput="inputField" />
+			</view>
+			<!-- 税前/税后 -->
+			<view class="form-item" wx:if="{{form.kind==='in'}}">
+				<text class="label">税前/税后</text>
+				<picker mode="selector" range="{{taxTypeOptions}}" value="{{form.taxTypeIndex}}" bindchange="pickTaxType">
+					<view class="picker">{{taxTypeLabel}}</view>
+				</picker>
+			</view>
+			<!-- 必要性评分 -->
+			<view class="form-item" wx:if="{{form.kind==='out'}}">
+				<text class="label">必要性评分</text>
+				<picker mode="selector" range="{{necessityOptions}}" value="{{form.necessityIndex}}" bindchange="pickNecessity">
+					<view class="picker">{{necessityLabel}}</view>
+				</picker>
+			</view>
+			<!-- 模板 -->
+			<view class="form-item inline">
+				<text class="label small">可设为模板</text>
+				<switch checked="{{form.asTemplate}}" bindchange="toggleTemplate" />
+			</view>
+			<view class="actions-row">
+				<button class="btn" type="button" wx:if="{{editId}}" bindtap="deleteBill" data-id="{{editId}}">删除</button>
+				<button class="btn" type="button" wx:if="{{lastAction}}" bindtap="undo">撤销</button>
+				<button class="btn primary full" bindtap="submit">{{editId?'更新':'保存'}}</button>
+			</view>
+		</view>
+
+		<!-- 最近记录卡片 -->
+			<view class="card bill-history">
+			<view class="card-title">最近记录 <text class="summary">收入 {{totalIncome||0}} | 支出 {{totalExpense||0}} | 净额 {{totalNet||0}}</text></view>
+			<scroll-view scroll-x="true" class="table-scroll">
+				<view class="bill-table">
+					<view class="tr th-row">
+						<view class="th col-time">时间</view>
+						<view class="th col-kind">类型</view>
+						<view class="th col-cat">分类</view>
+						<view class="th col-amt">金额(币种)</view>
+						<view class="th col-tax">税</view>
+						<view class="th col-nec">必要性</view>
+						<view class="th col-op">操作</view>
+					</view>
+					<block wx:for="{{recent}}" wx:key="id">
+						<view class="tr">
+							<view class="td col-time">{{item.dateShort}}</view>
+							<view class="td col-kind {{item.kind==='in'?'pos':'neg'}}">{{item.kind==='in'?'收入':'支出'}}</view>
+							<view class="td col-cat">{{item.category}}</view>
+							<view class="td col-amt {{item.kind==='in'?'pos':'neg'}}">{{item.sign}}{{item.amount}}{{item.currency}}</view>
+							<view class="td col-tax">{{item.taxType||'-'}}</view>
+							<view class="td col-nec nec{{item.necessityScore}}">{{item.necessityScore||'-'}}</view>
+							<view class="td col-op"><text class="op" data-id="{{item.id}}" bindtap="editBill">编辑</text><text class="op del" data-id="{{item.id}}" bindtap="deleteBill">删</text></view>
+						</view>
+					</block>
+				</view>
+			</scroll-view>
+			<view class="sub-note">提示：更多可视化与自由指数请访问 财务仪表盘。</view>
+		</view>
+
+		<!-- 月度与分类分析 (Phase1) -->
+		<view class="card analytics" wx:if="{{monthlyAggs && monthlyAggs.length}}">
+			<view class="card-title">月度概览</view>
+			<view class="month-row" wx:for="{{monthlyAggs}}" wx:key="month">
+				<view class="m-left">
+					<text class="m-month">{{item.month}}</text>
+					<text class="m-savings">储蓄 {{item.savings}}</text>
+				</view>
+				<view class="m-bars">
+					<view class="bar income">收 {{item.income}}</view>
+					<view class="bar expense">支 {{item.expense}}</view>
+					<view class="bar rate">率 {{item.savingsRate}}%</view>
+				</view>
+			</view>
+			<view class="split"></view>
+			<view class="card-sub">分类占比 (本月)</view>
+			<view class="cat-list">
+				<block wx:for="{{catBreakdownOut.list}}" wx:key="category">
+					<view class="cat-item">
+						<text class="cat-name">{{item.category}}</text>
+						<text class="cat-val">{{item.amount}} ({{item.pct}}%)</text>
+					</view>
+				</block>
+				<view class="cat-total">总支出：{{catBreakdownOut.total}}</view>
+			</view>
+		</view>
+
+		<!-- 周期模板管理 -->
+		<view class="card recur" wx:if="{{true}}">
+			<view class="card-title">周期模板 <button class="btn small" type="button" bindtap="openRecurringDialog">新增</button></view>
+			<view class="bulk-row">
+				<button class="btn tiny" bindtap="bulkEnable" type="button">全部启用</button>
+				<button class="btn tiny" bindtap="bulkDisable" type="button">全部停用</button>
+			</view>
+			<view class="recur-filters" wx:if="{{(recurringCategoryOptions && recurringCategoryOptions.length>1) || true}}">
+				<picker mode="selector" range="{{recurringCategoryOptions}}" bindchange="filterRecurringCategory">
+					<view class="picker small">分类筛选：{{recurringFilterCategory || '全部'}}</view>
+				</picker>
+				<view class="sort-row">
+					<text class="sort-label">排序:</text>
+					<text class="sort-btn {{recurringSort==='day'?'active':''}}" data-v="day" bindtap="sortRecurring">日/周</text>
+					<text class="sort-btn {{recurringSort==='category'?'active':''}}" data-v="category" bindtap="sortRecurring">分类</text>
+					<text class="sort-btn {{recurringSort==='amount'?'active':''}}" data-v="amount" bindtap="sortRecurring">金额</text>
+				</view>
+			</view>
+			<view class="recur-list" wx:if="{{recurringListFiltered.length}}">
+				<block wx:for="{{recurringListFiltered}}" wx:key="id">
+					<view class="recur-item {{item._pending?'pending':''}}">
+						<view class="ri-main">
+							<text class="ri-cat">{{item.category}}</text>
+							<text class="ri-amt">{{item.amount}}</text>
+							<text class="ri-day" wx:if="{{(item.mode||'monthly')==='monthly'}}">每月{{item.day}}日</text>
+							<text class="ri-day" wx:if="{{(item.mode||'monthly')==='weekly'}}">周{{item.weekdays.join(',')}}</text>
+							<text class="ri-day" wx:if="{{(item.mode||'monthly')==='interval'}}">间隔{{item.intervalDays}}天</text>
+							<text class="ri-kind {{item.kind==='in'?'pos':'neg'}}">{{item.kind==='in'?'收入':'支出'}}</text>
+							<text class="ri-state {{item.enabled!==false?'on':'off'}}">{{item.enabled!==false?'启用':'停用'}}</text>
+							<text class="ri-last" wx:if="{{item.lastExec}}">上次 {{item.lastExec}}</text>
+							<text class="ri-badge" wx:if="{{item._pending}}">本月未执行</text>
+						</view>
+						<view class="ri-ops">
+							<text class="op" data-id="{{item.id}}" bindtap="openRecurringDialog">编辑</text>
+							<text class="op" data-id="{{item.id}}" bindtap="toggleRecurring">{{item.enabled!==false?'停用':'启用'}}</text>
+							<text class="op" data-id="{{item.id}}" bindtap="executeRecurring">执行</text>
+							<text class="op" data-id="{{item.id}}" bindtap="copyRecurring">复制</text>
+							<text class="op" data-id="{{item.id}}" bindtap="openRecurringLogs">日志</text>
+							<text class="op del" data-id="{{item.id}}" bindtap="deleteRecurring">删除</text>
+						</view>
+					</view>
+				</block>
+			</view>
+			<view class="empty" wx:if="{{!recurringListFiltered.length}}">暂无模板</view>
+		</view>
+	</view>
+</view>
+<!-- 周期模板弹窗 -->
+<view class="dialog" wx:if="{{showRecurringDialog}}">
+	<view class="dialog-content">
+		<text class="dialog-title">{{recurringForm.id?'编辑模板':'新增模板'}}</text>
+		<view class="form-item">
+			<text class="label">类型</text>
+			<view class="seg">
+				<view class="seg-item {{recurringForm.kind==='out'?'active':''}}" data-v="out" bindtap="recurringKindTap">支出</view>
+				<view class="seg-item {{recurringForm.kind==='in'?'active':''}}" data-v="in" bindtap="recurringKindTap">收入</view>
+			</view>
+		</view>
+		<view class="form-item">
+			<text class="label">分类</text>
+			<input placeholder="如 房租" value="{{recurringForm.category}}" data-field="category" bindinput="recurringInput" />
+		</view>
+		<view class="form-item">
+			<text class="label">金额</text>
+			<input type="digit" placeholder="0" value="{{recurringForm.amount}}" data-field="amount" bindinput="recurringInput" />
+		</view>
+		<view class="form-item">
+			<text class="label">模式</text>
+			<picker mode="selector" range="{{['按月','按周','按间隔']}}" bindchange="recurringModePick">
+				<view class="picker">{{recurringForm.mode==='monthly'?'按月':(recurringForm.mode==='weekly'?'按周':'按间隔')}}</view>
+			</picker>
+		</view>
+		<view class="form-item" wx:if="{{recurringForm.mode==='monthly'}}">
+			<text class="label">执行日(1-31)</text>
+			<input type="number" placeholder="1" value="{{recurringForm.day}}" data-field="day" bindinput="recurringInput" />
+		</view>
+		<view class="form-item" wx:if="{{recurringForm.mode==='weekly'}}">
+			<text class="label">星期选择</text>
+			<view class="week-select">
+				<block wx:for="{{[1,2,3,4,5,6,7]}}" wx:key="*this">
+					<view class="wk {{recurringForm.weekdays.indexOf(item)>-1?'on':''}}" data-d="{{item}}" bindtap="toggleWeekday">{{item}}</view>
+				</block>
+			</view>
+		</view>
+		<view class="form-item" wx:if="{{recurringForm.mode==='interval'}}">
+			<text class="label">间隔天数</text>
+			<input type="number" placeholder="例如 10" value="{{recurringForm.intervalDays}}" data-field="intervalDays" bindinput="recurringInput" />
+		</view>
+		<view class="form-item" wx:if="{{recurringForm.mode==='interval'}}">
+			<text class="label">开始日期</text>
+			<picker mode="date" value="{{recurringForm.startDate}}" data-field="startDate" bindchange="recurringInput"><view class="picker">{{recurringForm.startDate}}</view></picker>
+		</view>
+		<view class="form-item">
+			<text class="label">备注</text>
+			<input placeholder="可留空" value="{{recurringForm.remark}}" data-field="remark" bindinput="recurringInput" />
+		</view>
+		<view class="form-item inline">
+			<text class="label small">启用</text>
+			<switch checked="{{recurringForm.enabled}}" bindchange="recurringSwitch" />
+		</view>
+		<view class="dialog-actions">
+			<button class="btn" type="button" bindtap="closeRecurringDialog">取消</button>
+			<button class="btn primary" type="button" bindtap="submitRecurring">保存</button>
+		</view>
+	</view>
+</view>
+<app-fab />
+<!-- 执行日志弹窗 -->
+<view class="dialog" wx:if="{{showRecurringLogs}}">
+	<view class="dialog-content">
+		<text class="dialog-title">执行日志(最近)</text>
+		<view class="log-list" wx:if="{{recurringLogs.length}}">
+			<block wx:for="{{recurringLogs}}" wx:key="id">
+				<view class="log-item">
+					<text>{{item.datetime}}</text>
+					<text>{{item.amount}}</text>
+				</view>
+			</block>
+		</view>
+		<view wx:if="{{!recurringLogs.length}}" class="empty">暂无日志</view>
+		<view class="dialog-actions">
+			<button class="btn" type="button" bindtap="closeRecurringLogs">关闭</button>
+		</view>
+	</view>
+</view>

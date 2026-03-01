@@ -1,0 +1,62 @@
+<view class="page sport-page">
+	<view class="app-header"><text class="h1">运动记录</text></view>
+	<view class="content">
+		<form class="card sport-form" bindsubmit="submitSport">
+			<text class="card-title">记录运动</text>
+			<view class="form-item">
+				<label>运动类型</label>
+				<picker mode="selector" range="{{typeNames}}" value="{{typeIndex}}" bindchange="pickType">
+					<view class="picker-display">{{typeNames[typeIndex]}}</view>
+				</picker>
+			</view>
+			<view class="metric-fields">
+				<block wx:for="{{metricFields}}" wx:key="name">
+					<view class="mf-box">
+						<label>{{item.label}}</label>
+						<input type="number" name="{{item.name}}" placeholder="{{item.placeholder}}" value="{{item.value}}" data-name="{{item.name}}" bindinput="inputMetric" />
+					</view>
+				</block>
+			</view>
+			<view class="form-item">
+				<label>日期</label>
+				<picker mode="date" value="{{date}}" bindchange="pickDate"><view class="picker-display">{{date}}</view></picker>
+			</view>
+			<view class="form-item">
+				<label>时间</label>
+				<picker mode="time" value="{{time}}" bindchange="pickTime"><view class="picker-display">{{time}}</view></picker>
+			</view>
+			<view class="form-item inline">
+				<label>准备同步微信运动</label>
+				<switch checked="{{syncWanted}}" bindchange="toggleSync" />
+			</view>
+			<view class="sub-note">单位规则：time(分钟1-1440) · distance(米1-100000) · number(个1-10000) · calorie(≥1)</view>
+			<button class="btn primary full" formType="submit">保存记录</button>
+			<button class="btn outline full" type="button" bindtap="simulateSync" disabled="{{!hasPending}}">模拟同步到微信运动</button>
+		</form>
+
+		<view class="card history">
+			<text class="card-title">历史记录 <text class="sub-note" style="margin-left:auto;font-weight:400;">最新优先</text></text>
+			<view>
+				<view wx:if="{{!records.length}}" class="sub-note">暂无记录</view>
+				<view>
+					<block wx:for="{{records}}" wx:key="id">
+						<view class="history-item">
+							<view class="h-top">
+								<text class="type">{{item.typeName}}</text>
+								<text class="dt">{{item.dateDisplay}}</text>
+								<text class="flag-sync" wx:if="{{item.syncWanted && !item.synced}}">待同步</text>
+								<text class="flag-synced" wx:if="{{item.synced}}">已同步</text>
+							</view>
+							<view class="h-metrics">
+								<block wx:for="{{item.metricPills}}" wx:key="*this">
+									<text class="pill">{{item}}</text>
+								</block>
+							</view>
+						</view>
+					</block>
+				</view>
+			</view>
+		</view>
+	</view>
+</view>
+<app-fab />

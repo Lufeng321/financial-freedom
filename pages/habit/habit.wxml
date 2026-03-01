@@ -1,0 +1,70 @@
+<view class="page habit-page">
+	<view class="app-header"><text class="h1">习惯管理</text></view>
+	<view class="content">
+		<view class="card add-habit">
+			<text class="card-title">创建习惯</text>
+			<view class="habit-templates" wx:if="{{habitTemplates.length}}">
+				<block wx:for="{{habitTemplates}}" wx:key="key">
+					<view class="tpl-chip" data-key="{{item.key}}" bindtap="useHabitTemplate">{{item.name}}</view>
+				</block>
+			</view>
+			<form bindsubmit="submitHabit">
+				<input class="ipt" name="name" placeholder="习惯名称，如：早起" value="" />
+				<picker mode="selector" range="{{categoryRange}}" value="{{categoryIndex}}" bindchange="e=>setData({categoryIndex:e.detail.value})">
+					<view class="picker-display">{{categoryRange[categoryIndex]}} 类别</view>
+				</picker>
+				<input class="ipt" type="number" placeholder="预估年化影响金额(可选)" value="{{annualImpact}}" bindinput="e=>setData({annualImpact:e.detail.value})" />
+				<picker mode="selector" range="{{goalTypeRange}}" value="{{goalTypeIndex}}" bindchange="changeGoalType">
+					<view class="picker-display">{{goalTypeRange[goalTypeIndex]}}</view>
+				</picker>
+				<label class="inline allow-retro"><checkbox checked="{{allowRetro}}" bindchange="toggleRetro"/> 允许本月补打卡 (限制 2 天内)</label>
+				<button class="btn primary full" formType="submit">添加</button>
+			</form>
+		</view>
+
+		<view class="card habit-list-section">
+			<text class="card-title">我的习惯 <text class="sub-note">(点击习惯名称展开日历)</text></text>
+			<view>
+				<view wx:if="{{!habits.length}}" class="sub-note">暂无习惯</view>
+				<ul class="habit-list">
+					<block wx:for="{{habits}}" wx:key="id">
+						<li class="habit-row {{item.archived?'archived':''}}" data-id="{{item.id}}">
+							<view class="info name-toggle" bindtap="toggleCalendar" data-id="{{item.id}}">
+								<text class="name">{{item.name}}</text>
+								<text class="streak">连续 {{item.streak}} 天</text>
+							</view>
+							<view class="actions">
+								<button class="btn small" disabled="{{item.todayDone}}" data-id="{{item.id}}" bindtap="checkHabit">{{item.todayDone?'✓':'打卡'}}</button>
+								<button class="btn small" data-id="{{item.id}}" bindtap="archiveHabit">{{item.archived?'↩':'📦'}}</button>
+								<button class="btn small danger" data-id="{{item.id}}" bindtap="deleteHabit">✕</button>
+							</view>
+							<view class="habit-calendar" wx:if="{{item.show}}">
+								<view class="calendar-head">{{currentYear}}年{{currentMonth}}月</view>
+								<view class="calendar-grid mini">
+									<block wx:for="{{item.monthDays}}" wx:key="d">
+										<view class="day {{item.monthDays[index].done?'done':''}}">{{item.monthDays[index].d}}</view>
+									</block>
+								</view>
+							</view>
+						</li>
+					</block>
+				</ul>
+			</view>
+		</view>
+
+		<view class="card heatmap-section">
+			<text class="card-title">本月热力图 <text class="sub-note">(按打卡频次强度)</text></text>
+			<view class="habit-heatmap" aria-label="习惯本月热力图" role="group">
+				<block wx:for="{{heatmapCells}}" wx:key="idx">
+					<view class="cell" data-c="{{item.c}}" data-day="{{item.day}}" />
+				</block>
+			</view>
+		</view>
+		<view class="card tip-section">
+			<text class="card-title">提示</text>
+			<text class="tip-text">每个习惯都有自己的日历。点击习惯行的名称可展开/收起当月打卡日历；当你点击“打卡”按钮，会自动标记今天并更新连续天数。</text>
+		</view>
+	</view>
+</view>
+<app-fab />
+	<canvas type="2d" id="streakCanvas" style="position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:999;" hidden></canvas>

@@ -1,0 +1,6 @@
+<view class="xp-ring" style="{{circleStyle}}">
+	<view class="inner" style="width:{{size - stroke*2}}px;height:{{size - stroke*2}}px;">
+		<view class="lvl">Lv{{level}}</view>
+		<view class="pct">{{pct}}%</view>
+	</view>
+</view>

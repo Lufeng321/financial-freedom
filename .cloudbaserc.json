@@ -1,0 +1,10 @@
+{
+	"envId": "cloud1-3gys9fiz70739302",
+	"framework": {
+		"name": "miniapp",
+		"plugins": {}
+	},
+	"functionRoot": "cloudfunctions",
+	"functions": [],
+	"region": "ap-shanghai"
+}

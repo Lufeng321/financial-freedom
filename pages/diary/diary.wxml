@@ -1,0 +1,57 @@
+<view class="page diary-page">
+	<view class="app-header"><text class="h1">反思日记</text></view>
+	<view class="content">
+		<view class="card diary-editor">
+			<text class="card-title">写日记</text>
+			<view class="form-item">
+				<label>日期</label>
+				<picker mode="date" value="{{form.date}}" bindchange="pickDate"><view class="picker-display">{{form.date}}</view></picker>
+			</view>
+			<view class="form-item">
+				<label>情感评分</label>
+				<view class="rate">
+					<block wx:for="{{moods}}" wx:key="v">
+						<text class="mood-icon {{form.mood===item.v?'active':''}}" data-v="{{item.v}}" bindtap="setMood">{{item.icon}}</text>
+					</block>
+				</view>
+			</view>
+			<textarea class="diary-text" placeholder="记录今天的反思..." value="{{form.text}}" bindinput="inputField" data-field="text" rows="8" />
+
+			<view class="form-item">
+				<label>智能总结 (占位)</label>
+				<button class="btn small" type="button" bindtap="generateSummary" wx:if="{{!summary.loading}}">生成今日总结</button>
+				<text class="sub-note" wx:if="{{summary.loading}}">生成中...</text>
+				<view class="summary-box" wx:if="{{summary.text}}">
+					<text class="sum-title">结构化 JSON:</text>
+					<text class="sum-json" selectable>{{summary.text}}</text>
+				</view>
+			</view>
+			<view class="form-item">
+				<label>图片（可多选）</label>
+				<view class="image-preview-grid">
+					<block wx:for="{{images}}" wx:key="id">
+						<view class="img-box"><image src="{{item.url}}" mode="aspectFill" /><button class="remove-btn" data-id="{{item.id}}" bindtap="removeImage">×</button></view>
+					</block>
+					<button class="btn small" type="button" bindtap="chooseImages">添加图片</button>
+				</view>
+			</view>
+			<text class="save-status">{{saveStatus}}</text>
+			<view style="margin-top:10px;display:flex;gap:10px;">
+				<button class="btn" type="button" bindtap="manualSave">保存</button>
+			</view>
+		</view>
+
+		<view class="card diary-history">
+			<text class="card-title">历史日记 <text class="sub-note">(可搜索 / 情绪高亮)</text></text>
+			<view class="toolbar">
+				<input class="search" type="search" placeholder="搜索关键词" value="{{searchKey}}" bindinput="onSearch" />
+			</view>
+			<view class="timeline" aria-live="polite">
+				<block wx:for="{{filteredHistory}}" wx:key="id">
+					<navigator url="/pages/diaryDetail/diaryDetail?id={{item.id}}" class="entry mood-{{item.mood}}"><text class="time">{{item.dateMMDD}}{{item.seqTag}}</text> {{item.preview}}</navigator>
+				</block>
+			</view>
+		</view>
+	</view>
+</view>
+<app-fab />

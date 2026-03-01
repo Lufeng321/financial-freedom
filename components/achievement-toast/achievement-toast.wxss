@@ -1,0 +1,7 @@
+.a-toast{position:fixed;left:50%;top:20%;transform:translateX(-50%);z-index:999;background:rgba(0,0,0,.75);color:#fff;padding:14px 18px;border-radius:18px;backdrop-filter:blur(6px);animation:pop .5s ease;}
+.a-toast .inner{display:flex;align-items:center;gap:12px;}
+.a-toast .icon{font-size:28px;}
+.a-toast .title{font-size:12px;display:block;opacity:.8;}
+.a-toast .name{font-size:16px;font-weight:600;display:block;}
+.a-toast .desc{font-size:12px;display:block;opacity:.6;margin-top:2px;max-width:200px;}
+@keyframes pop{0%{transform:translate(-50%, -10px) scale(.8);opacity:0;}100%{transform:translate(-50%,0) scale(1);opacity:1;}}

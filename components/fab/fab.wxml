@@ -1,0 +1,12 @@
+<view class="fab" catch:tap="toggle" bindlongpress="longPress">
+  <view class="fab-main {{open?'open':''}}">+</view>
+  <view class="fab-actions {{open?'show':'hide'}}" catch:tap="noop">
+    <view class="fab-btn" bind:tap="quick" data-tab="bill">记一笔</view>
+    <view class="fab-btn" bind:tap="quick" data-tab="habit">习惯</view>
+    <view class="fab-btn" bind:tap="quick" data-tab="pomo">番茄</view>
+    <view class="fab-btn" bind:tap="quick" data-tab="asset">资产</view>
+    <view class="fab-btn" bind:tap="quick" data-tab="skill">技能</view>
+    <view class="fab-divider" />
+    <view class="fab-btn" bind:tap="go" data-url="/pages/diary/diary">日记</view>
+  </view>
+</view>

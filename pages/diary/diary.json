@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "反思日记",
+  "usingComponents": {
+    "app-fab": "/components/fab/fab"
+  }
+}

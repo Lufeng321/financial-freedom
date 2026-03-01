@@ -1,0 +1,153 @@
+/* 引入原型整体配色与布局 */
+page, .finance-page{background:#f5f7fb;min-height:100vh;padding-bottom:80px;}
+.app-header{padding:16px 16px 8px;}
+.h1{font-size:20px;font-weight:600;}
+.content{padding:16px;display:flex;flex-direction:column;gap:16px;}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:16px;box-shadow:0 4px 12px -4px rgba(0,0,0,.08);} 
+.card-title{font-size:16px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+/* 自由指数 */
+.freedom-index-card .fi-wrapper{display:flex;flex-direction:column;gap:16px;align-items:center;}
+.ring{width:200px;height:200px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;transition:background 1s linear;}
+.ring-center{width:140px;height:140px;background:#fff;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 0 8px #fff inset;}
+.fi-percent{font-size:32px;font-weight:600;}
+.fi-desc{font-size:12px;color:#5f6b7a;margin-top:4px;}
+.fi-metrics{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%;}
+.fi-item{background:#f1f5f9;padding:10px;border-radius:10px;font-size:12px;display:flex;flex-direction:column;gap:4px;}
+.fi-item .val{font-size:16px;font-weight:600;}
+.empty{padding:12px;border:1px dashed #cbd5e1;border-radius:10px;font-size:12px;color:#64748b;text-align:center;background:#f8fafc;}
+.calc-error{margin-top:10px;color:#dc2626;font-size:12px;}
+.split-passive{margin-top:8px;display:flex;flex-direction:column;gap:2px;font-size:11px;color:#475569;background:#f1f5f9;padding:8px 10px;border-radius:8px;}
+.picker{display:flex;align-items:center;}
+.snapshot-list{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+.snap-row{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;background:#f1f5f9;padding:6px 10px;border-radius:8px;}
+.snap-row .m{font-weight:600;}
+.goals-card .goal-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px;}
+.goals-card .goal-row:last-child{margin-bottom:0;}
+.g-name{width:70px;font-weight:600;}
+.g-bar{flex:1;height:10px;background:#e2e8f0;border-radius:6px;overflow:hidden;position:relative;}
+.g-fill{height:100%;background:linear-gradient(90deg,#4f46e5,#6366f1);}
+.g-bar.ok .g-fill{background:linear-gradient(90deg,#16a34a,#22c55e);} 
+.g-bar.warn .g-fill{background:linear-gradient(90deg,#d97706,#f59e0b);} 
+.g-bar.bad .g-fill{background:linear-gradient(90deg,#dc2626,#f87171);} 
+.g-val{min-width:90px;text-align:right;color:#374151;}
+.goals-card .link{font-size:12px;color:#3366ff;margin-left:auto;}
+.scenarios{margin-top:8px;font-size:11px;background:#f1f5f9;padding:6px 8px;border-radius:8px;display:flex;flex-direction:column;gap:4px;}
+.scenarios .sc-title{font-weight:600;color:#374151;}
+.sc-row{color:#475569;}
+.fi-target{margin-top:4px;font-size:14px;font-weight:500;text-align:center;}
+.celebrate{margin-top:8px;text-align:center;color:#16a34a;font-weight:600;}
+/* 资产与负债 */
+.asset-liability-card .al-flex{display:flex;flex-direction:row;gap:24rpx;align-items:stretch;flex-wrap:nowrap;}
+.asset-liability-card .al-flex > .al-col{flex:0 0 50%;max-width:50%;}
+@media(max-width:560px){.asset-liability-card .al-flex{flex-direction:column;}}
+.al-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:12rpx;}
+.al-head{font-size:14px;font-weight:600;}
+.al-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.al-item{background:#f8fafc;padding:8px 10px;border-radius:10px;display:flex;justify-content:space-between;align-items:center;font-size:12px;}
+.al-item:active{background:#eef2f7;}
+.al-item .name{font-weight:600;}
+.al-item .yield{font-size:11px;color:#5f6b7a;}
+.al-summary{margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:13px;}
+.al-summary .v{font-size:16px;font-weight:600;}
+.sub-note{font-size:12px;color:#5f6b7a;}
+.amt.pos{color:#15803d;}
+.amt.neg{color:#d92c2c;}
+/* 按钮 & 表单 */
+.btn{border:none;cursor:pointer;border-radius:10px;padding:6px 12px;font-size:12px;background:#e2e8f0;color:#1f2933;transition:.2s;font-weight:500;}
+.btn.small{font-size:12px;padding:4px 8px;}
+.btn.primary{background:#3366ff;color:#fff;}
+.btn.danger{background:#dc2626;color:#fff;}
+.form-item{display:flex;flex-direction:column;gap:6px;font-size:14px;}
+.form-item label{font-size:12px;color:#5f6b7a;}
+input{padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;font-size:14px;}
+/* 计算器 */
+.calculator-card .calc-result{margin-top:12px;font-size:14px;display:flex;gap:12px;flex-wrap:wrap;}
+.res-box{background:#f1f5f9;padding:10px 14px;border-radius:12px;display:flex;flex-direction:column;gap:6px;min-width:120px;}
+.r-lab{font-size:12px;color:#5f6b7a;}
+.r-val{font-size:20px;font-weight:600;color:#1f2933;}
+.r-val.gap{color:#d97706;}
+.five-year-plan{margin-top:12px;font-size:12px;background:#f1f5f9;padding:10px;border-radius:10px;display:flex;flex-direction:column;gap:4px;}
+.plan-row{display:flex;align-items:center;justify-content:space-between;}
+.plan-row .hit{color:#16a34a;font-weight:600;}
+/* 图表占位 */
+.chart-placeholder{height:140px;background:repeating-linear-gradient(45deg,#f1f5f9,#f1f5f9 10px,#e2e8f0 10px,#e2e8f0 20px);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#5f6b7a;}
+/* 响应 */
+@media (max-width:560px){
+	.finance-page .al-flex{flex-direction:column;}
+	.finance-page .al-item{flex-direction:column;align-items:flex-start;gap:4px;}
+}
+/* 强制资产与负债模块在小屏依然保持两列布局 */
+@media (max-width:560px){
+	.asset-liability-card .al-flex{flex-direction:row !important;}
+}
+/* 弹窗 */
+.dialog{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;padding:16px;z-index:999;}
+.dialog-content{background:#fff;padding:20px;border-radius:14px;width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px;}
+.dialog-title{font-size:16px;font-weight:600;}
+.ipt{padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;font-size:14px;}
+.dialog-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:4px;}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.card-head .title{font-size:16px;font-weight:600;}
+.freedom-card .percent{font-size:18px;font-weight:600;}
+.freedom-card .percent.full{color:#15803d;}
+.bar-track{width:100%;height:22px;background:#e5e7eb;border-radius:16px;overflow:hidden;margin-top:4px;}
+.bar-track.slim{height:14px;margin-top:12px;}
+.bar-fill{height:100%;background:linear-gradient(90deg,#3366ff,#6aa0ff);transition:width .8s ease;}
+.mini-metrics{display:flex;justify-content:space-between;margin-top:10px;}
+.ring-wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.ring{width:160px;height:160px;border-radius:50%;background:conic-gradient(#3366ff 0%, #e5e7eb 0%);position:relative;display:flex;align-items:center;justify-content:center;animation:popIn .6s ease;}
+.ring-center{width:110px;height:110px;background:#fff;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 0 8px #fff inset;}
+.ring-center .big{font-size:28px;font-weight:600;color:#1f2933;}
+.ring-center .small{font-size:12px;color:#64748b;margin-top:2px;}
+.ring-side{flex:1;display:flex;flex-direction:column;gap:10px;min-width:160px;}
+.rs-item{display:flex;align-items:center;gap:6px;font-size:12px;background:#f1f5f9;padding:8px 10px;border-radius:10px;}
+.rs-item .num{font-weight:600;color:#1f2933;margin-left:4px;}
+.target-msg{margin-top:10px;font-size:12px;color:#64748b;text-align:center;}
+.target-msg.done{color:#15803d;font-weight:600;}
+.celebrate{margin-top:6px;text-align:center;color:#16a34a;font-weight:600;animation:pulse .9s ease infinite alternate;}
+@keyframes pulse{from{transform:scale(1);}to{transform:scale(1.05);} }
+.progress-ratio{margin-top:16px;display:flex;align-items:center;gap:12px;}
+.pr-lab{font-size:12px;color:#64748b;}
+.pr-track{flex:1;height:10px;background:#e2e8f0;border-radius:6px;overflow:hidden;}
+.pr-fill{height:100%;background:linear-gradient(90deg,#22c55e,#16a34a);transition:width .6s ease;}
+@keyframes popIn{0%{opacity:0;transform:scale(.8);}60%{opacity:1;transform:scale(1.05);}100%{transform:scale(1);} }
+.mm-item{display:flex;flex-direction:column;gap:2px;font-size:12px;color:#5f6b7a;}
+.mm-item .val{font-size:16px;font-weight:600;color:#1f2933;}
+/* 资产负债 */
+.al-card .al-flex{display:flex;flex-direction:column;gap:18px;}
+@media (min-width:620px){.al-card .al-flex{flex-direction:row;align-items:flex-start;}}
+.al-card .col{flex:1;display:flex;flex-direction:column;gap:10px;}
+.col-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;}
+.badge{background:#e0f2fe;color:#0369a1;padding:2px 8px;border-radius:12px;font-size:12px;}
+.badge.warn{background:#fee2e2;color:#b91c1c;}
+.list{max-height:200px;}
+.row{background:#f8fafc;padding:8px 10px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;margin-bottom:8px;}
+.row:last-child{margin-bottom:0;}
+.meta{display:flex;flex-direction:column;gap:2px;}
+.name{font-weight:600;}
+.sub{font-size:11px;color:#64748b;}
+.amt{font-weight:600;}
+.amt.pos{color:#15803d;}
+.amt.neg{color:#dc2626;}
+.total{margin-top:4px;font-size:12px;color:#475569;}
+/* 计算器 */
+.calc-card .form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;}
+.f-item{display:flex;flex-direction:column;gap:4px;font-size:12px;}
+.f-item .lab{color:#64748b;}
+.calc-result{margin-top:14px;display:flex;gap:16px;flex-wrap:wrap;}
+.res-box{background:#f1f5f9;padding:10px 14px;border-radius:12px;display:flex;flex-direction:column;gap:6px;min-width:120px;}
+.r-lab{font-size:12px;color:#64748b;}
+.r-val{font-size:20px;font-weight:600;color:#1f2933;}
+.r-val.gap{color:#d97706;}
+.plan{margin-top:18px;display:flex;flex-direction:column;gap:8px;}
+.plan-head{font-size:13px;font-weight:600;color:#334155;}
+.plan-row{display:flex;align-items:center;justify-content:space-between;background:#f8fafc;padding:8px 10px;border-radius:10px;font-size:12px;}
+.plan-row .y{font-weight:600;color:#1e293b;}
+.plan-row .v{font-weight:600;}
+.plan-row .tag{color:#64748b;}
+.plan-row .tag.hit{color:#16a34a;font-weight:600;}
+.charts-card .chart-ph{height:100px;border:1px dashed #cbd5e1;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#64748b;margin-top:10px;}
+.charts-card .chart-ph:first-child{margin-top:0;}
+/* 资产高级折叠 */
+.adv-toggle{font-size:12px;color:#2563eb;margin:4px 0 8px;}
+.adv-section{background:#f8fafc;padding:8px 10px;border-radius:8px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px;}

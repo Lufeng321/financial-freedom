@@ -1,0 +1,229 @@
+<view class="page finance-page">
+	<view class="app-header">
+		<text class="h1">财务自由仪表盘</text>
+	</view>
+	<view class="content">
+		<!-- 自由指数环形仪表 -->
+			<view class="card freedom-index-card">
+				<text class="card-title">自由指数</text>
+				<view class="fi-wrapper">
+					<view class="ring" style="{{ringStyle}}">
+						<view class="ring-center">
+							<text class="fi-percent">{{freedomPercent}}%</text>
+							<text class="fi-desc">被动 / 支出 (日)</text>
+						</view>
+					</view>
+					<view class="fi-metrics">
+						<view class="fi-item"><text class="lab">每日被动收入</text><text class="val">{{metrics.dayPassive}}</text></view>
+						<view class="fi-item"><text class="lab">每日总支出</text><text class="val">{{metrics.dayExpense}}</text></view>
+						<view class="fi-item"><text class="lab">年度被动收入(含预估)</text><text class="val">{{passiveYearFmt}}</text></view>
+						<view class="fi-item"><text class="lab">年度总支出</text><text class="val">{{expenseYearFmt}}</text></view>
+						<view class="fi-item"><text class="lab">储蓄率</text><text class="val">{{metrics.savingsRate}}%</text></view>
+						<view class="fi-item" wx:if="{{metrics.freedomRaw>100}}"><text class="lab">安全垫</text><text class="val">+{{metrics.safetyMarginPercent}}%</text></view>
+					</view>
+				</view>
+				<view class="fi-target">{{targetMsg}}</view>
+				<view class="celebrate" wx:if="{{metrics.freedom>=100}}">🎉 恭喜！你已实现财务自由！</view>
+				<view class="split-passive">
+					<view>已实现被动收入：{{metrics.realizedPassive}}</view>
+					<view>预估资产收益：{{metrics.estimatedPassive}}</view>
+					<view>债务年还款：{{metrics.annualDebtPayment}} · DTI {{metrics.dti}}%</view>
+				</view>
+			</view>
+
+		<!-- 资产与负债 -->
+		<view class="card asset-liability-card">
+			<text class="card-title">资产与负债</text>
+			<view class="al-flex">
+				<view class="al-col">
+					<view class="al-head">资产 (可生息)</view>
+					<view class="al-list">
+						<block wx:if="{{assets.length>0}}">
+							<block wx:for="{{assets}}" wx:key="id">
+							<view class="al-item" data-id="{{item.id}}" bindtap="openAssetDialog" style="width: 300rpx; display: flex; box-sizing: border-box">
+								<view class="meta">
+									<text class="name">{{item.name}}</text>
+									<text class="yield">ROI {{item.roi}}</text>
+								</view>
+								<text class="amt pos">{{item.amount}}</text>
+							</view>
+							</block>
+						</block>
+						<view wx:else class="empty">暂无资产，点击下方添加</view>
+					</view>
+					  <button class="btn small" bindtap="openAssetDialog" style="width: 300rpx; display: block; box-sizing: border-box; left: 0rpx; top: 0rpx">+ 添加资产</button>
+				</view>
+				<view class="al-col">
+					<view class="al-head">负债</view>
+					<view class="al-list">
+						<block wx:if="{{liabilities.length>0}}">
+							<block wx:for="{{liabilities}}" wx:key="id">
+							<view class="al-item" data-id="{{item.id}}" bindtap="openLiabilityDialog">
+								<view class="meta">
+									<text class="name">{{item.name}}</text>
+									<text class="yield">R {{item.rate}}</text>
+								</view>
+								<text class="amt neg">{{item.amount}}</text>
+							</view>
+							</block>
+						</block>
+						<view wx:else class="empty">暂无负债，点击下方添加</view>
+					</view>
+					  <button class="btn small" bindtap="openLiabilityDialog" style="width: 300rpx; display: block; box-sizing: border-box; left: 0rpx; top: 0rpx">+ 添加负债</button>
+				</view>
+			</view>
+			<view class="al-summary">
+				<view>总资产：<text class="v">{{assetsTotalFmt}}</text></view>
+				<view>总负债：<text class="v">{{liabilitiesTotalFmt}}</text></view>
+				<view>净资产：<text class="v">{{netAssetFmt}}</text></view>
+				<view>预计年被动收入：<text class="v">{{passiveYearFmt}}</text></view>
+			</view>
+			<view class="sub-note">分类：<text>流动</text>/<text>投资</text>/<text>退休</text> · 多币种将以主币种折算 (示例)。</view>
+		</view>
+
+		<!-- 财务自由计算器 -->
+		<view class="card calculator-card">
+			<text class="card-title">财务自由计算器</text>
+			<view class="calc-form">
+				<view class="form-item">
+					<label>年度总支出 (元)</label>
+					<input type="number" value="{{calc.expenseYear}}" data-field="expenseYear" bindinput="calcInput" placeholder="例如 120000" />
+				</view>
+				<view class="form-item">
+					<label>当前可投资资产 (元)</label>
+					<input type="number" value="{{calc.asset}}" data-field="asset" bindinput="calcInput" placeholder="例如 500000" />
+				</view>
+				<view class="form-item">
+					<label>预期年化回报率 (%)</label>
+					<input type="number" value="{{calc.roi}}" data-field="roi" bindinput="calcInput" placeholder="例如 6" />
+				</view>
+			</view>
+			<view class="calc-result" wx:if="{{calcRes.target}}">
+				<view class="res-box"><text class="r-lab">目标资产</text><text class="r-val">{{calcRes.target}}</text></view>
+				<view class="res-box"><text class="r-lab">差距</text><text class="r-val gap">{{calcRes.gap}}</text></view>
+			</view>
+			<view class="calc-error" wx:if="{{calcRes.err}}">{{calcRes.err}}</view>
+		</view>
+
+		<!-- 目标进度 -->
+		<view class="card goals-card" wx:if="{{goalsProgress}}">
+			<view class="card-title">目标进度 <text class="link" bindtap="openGoalDialog">设置</text></view>
+			<view class="goal-row">
+				<text class="g-name">应急金</text>
+				<view class="g-bar {{goalBarClass(goalsProgress.emergency.pct)}}"><view class="g-fill" style="width:{{goalsProgress.emergency.pct+'%'}}"></view></view>
+				<text class="g-val">{{goalsProgress.emergency.pct}}% {{goalsProgress.emergency.eta?('· ETA '+goalsProgress.emergency.eta):''}}</text>
+			</view>
+			<view class="goal-row">
+				<text class="g-name">储蓄率</text>
+				<view class="g-bar {{goalBarClass(goalsProgress.savingsRate.pct)}}"><view class="g-fill" style="width:{{goalsProgress.savingsRate.pct+'%'}}"></view></view>
+				<text class="g-val">{{goalsProgress.savingsRate.pct}}%</text>
+			</view>
+			<view class="goal-row">
+				<text class="g-name">被动收入</text>
+				<view class="g-bar {{goalBarClass(goalsProgress.freedomPassive.pct)}}"><view class="g-fill" style="width:{{goalsProgress.freedomPassive.pct+'%'}}"></view></view>
+				<text class="g-val">{{goalsProgress.freedomPassive.pct}}% {{goalsProgress.freedomPassive.eta?('· ETA '+goalsProgress.freedomPassive.eta):''}}</text>
+			</view>
+			<view class="scenarios" wx:if="{{goalsProgress.freedomPassive.scenarios}}">
+				<text class="sc-title">多情景 ETA</text>
+				<view class="sc-row">基准：{{goalsProgress.freedomPassive.scenarios.base||'-'}}</view>
+				<view class="sc-row">乐观：{{goalsProgress.freedomPassive.scenarios.optimistic||'-'}}</view>
+				<view class="sc-row">保守：{{goalsProgress.freedomPassive.scenarios.pessimistic||'-'}}</view>
+			</view>
+		</view>
+
+		<!-- 图表占位 -->
+		<view class="card charts-card">
+			<text class="card-title">趋势与对比</text>
+			<view class="chart-placeholder">被动收入增长曲线 (占位)</view>
+			<view class="chart-placeholder">支出 vs 被动收入 (占位)</view>
+			<view class="chart-placeholder">支出流向饼图 (占位)</view>
+			<view class="snapshot-list" wx:if="{{recentSnapshots.length}}">
+				<block wx:for="{{recentSnapshots}}" wx:key="month">
+					<view class="snap-row">
+						<text class="m">{{item.month}}</text>
+						<text class="v">净资产 {{item.netAsset}}</text>
+						<text class="v">储蓄率 {{item.savingsRate}}%</text>
+						<text class="v">被动 {{item.passiveRealized + item.passiveEstimated}}</text>
+					</view>
+				</block>
+			</view>
+		</view>
+	</view>
+
+		<!-- 资产编辑弹窗 -->
+		<view class="dialog" wx:if="{{showAssetDialog}}">
+			<view class="dialog-content">
+				<text class="dialog-title">资产</text>
+				<form bindsubmit="submitAsset">
+					<input name="id" value="{{assetForm.id}}" hidden />
+					<input class="ipt" name="name" placeholder="名称" value="{{assetForm.name}}" />
+					<input class="ipt" name="amount" type="number" placeholder="金额" value="{{assetForm.amount}}" />
+					<input class="ipt" name="roi" type="number" placeholder="预期年化 % (可填 6 或 0.06)" value="{{assetForm.roi}}" />
+					<view class="adv-toggle" bindtap="toggleAssetAdvanced">{{assetAdvanced?'收起高级':'展开更多'}} ▼</view>
+					<view wx:if="{{assetAdvanced}}" class="adv-section">
+						<picker name="type" mode="selector" range="{{assetTypeOptions}}" range-key="label" bindchange="assetTypePick">
+							<view class="ipt picker">类型：{{assetTypeLabel}}</view>
+						</picker>
+						<picker name="risk" mode="selector" range="{{riskOptions}}" range-key="label" bindchange="assetRiskPick">
+							<view class="ipt picker">风险：{{riskLabel}}</view>
+						</picker>
+						<picker name="liquidity" mode="selector" range="{{liquidityOptions}}" range-key="label" bindchange="assetLiquidityPick">
+							<view class="ipt picker">流动性：{{liquidityLabel}}</view>
+						</picker>
+					</view>
+					<view class="dialog-actions">
+						<button class="btn danger" type="button" wx:if="{{assetForm.id}}" bindtap="deleteAsset" formType="none">删除</button>
+						<button class="btn" type="button" bindtap="closeAssetDialog" formType="none">取消</button>
+						<button class="btn primary" formType="submit">保存</button>
+					</view>
+				</form>
+			</view>
+		</view>
+		<!-- 负债编辑弹窗 -->
+		<view class="dialog" wx:if="{{showLiabilityDialog}}">
+			<view class="dialog-content">
+				<text class="dialog-title">负债</text>
+				<form bindsubmit="submitLiability">
+					<input name="id" value="{{liabilityForm.id}}" hidden />
+					<input class="ipt" name="name" placeholder="名称" value="{{liabilityForm.name}}" />
+					<input class="ipt" name="amount" type="number" placeholder="金额" value="{{liabilityForm.amount}}" />
+					<input class="ipt" name="rate" type="number" placeholder="年利率 % (可填 5 或 0.05)" value="{{liabilityForm.rate}}" />
+					<picker name="type" mode="selector" range="{{liabilityTypeOptions}}" range-key="label" bindchange="liabilityTypePick">
+						<view class="ipt picker">类型：{{liabilityTypeLabel}}</view>
+					</picker>
+					<input class="ipt" name="remainTermMonths" type="number" placeholder="剩余期数(月)" value="{{liabilityForm.remainTermMonths}}" />
+					<input class="ipt" name="monthlyPayment" type="number" placeholder="月供(可选)" value="{{liabilityForm.monthlyPayment}}" />
+					<view class="dialog-actions">
+						<button class="btn danger" type="button" wx:if="{{liabilityForm.id}}" bindtap="deleteLiability" formType="none">删除</button>
+						<button class="btn" type="button" bindtap="closeLiabilityDialog" formType="none">取消</button>
+						<button class="btn primary" formType="submit">保存</button>
+					</view>
+				</form>
+			</view>
+		</view>
+		<!-- 目标设置弹窗 -->
+		<view class="dialog" wx:if="{{showGoalDialog}}">
+			<view class="dialog-content">
+				<text class="dialog-title">设置目标</text>
+				<view class="form-item">
+					<label>应急金目标 (元)</label>
+					<input class="ipt" data-field="emergencyFundTarget" bindinput="goalInput" value="{{goalForm.emergencyFundTarget}}" type="number" placeholder="例如 60000" />
+					<button class="btn" type="button" bindtap="recommendEmergency" style="margin-top:4px;">智能推荐</button>
+				</view>
+				<view class="form-item">
+					<label>年度储蓄率目标 (%)</label>
+					<input class="ipt" data-field="savingsRateTarget" bindinput="goalInput" value="{{goalForm.savingsRateTarget}}" type="number" placeholder="例如 40" />
+				</view>
+				<view class="form-item">
+					<label>年度被动收入目标 (元)</label>
+					<input class="ipt" data-field="freedomPassiveTarget" bindinput="goalInput" value="{{goalForm.freedomPassiveTarget}}" type="number" placeholder="留空=按年度支出" />
+				</view>
+				<view class="dialog-actions">
+					<button class="btn" type="button" bindtap="closeGoalDialog">取消</button>
+					<button class="btn primary" type="button" bindtap="submitGoals">保存</button>
+				</view>
+			</view>
+		</view>
+</view>
+
+<app-fab />

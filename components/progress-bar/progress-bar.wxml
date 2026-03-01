@@ -1,0 +1,10 @@
+<view class="pb-root {{size}}" aria-label="{{label}} 进度 {{percent}}%">
+  <view class="pb-track">
+    <view class="pb-fill {{flash? 'flash':''}}" style="width:{{clamped}}%"></view>
+    <view class="pb-glow" wx:if="{{flash}}"></view>
+  </view>
+  <view class="pb-meta" wx:if="{{showMeta}}">
+    <text class="pb-label">{{label}}</text>
+    <text class="pb-val">{{clamped}}%</text>
+  </view>
+</view>

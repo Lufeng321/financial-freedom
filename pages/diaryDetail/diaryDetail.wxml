@@ -1,0 +1,24 @@
+<view class="page detail-page">
+  <view class="card">
+    <view class="head">
+      <picker mode="date" value="{{form.date}}" bindchange="pickDate"><view class="date-display">{{form.date}}</view></picker>
+      <view class="moods">
+        <block wx:for="{{moods}}" wx:key="v">
+          <text class="m-icon {{form.mood===item.v?'on':''}}" data-v="{{item.v}}" bindtap="setMood">{{item.icon}}</text>
+        </block>
+      </view>
+    </view>
+    <textarea class="text" placeholder="编辑内容..." value="{{form.text}}" data-field="text" bindinput="inputField" />
+    <view class="images">
+      <block wx:for="{{images}}" wx:key="id">
+        <view class="img-box"><image src="{{item.url}}" mode="aspectFill" /><button class="rm" data-id="{{item.id}}" bindtap="removeImage">×</button></view>
+      </block>
+      <button class="btn small" type="button" bindtap="chooseImages">添加图片</button>
+    </view>
+    <view class="actions">
+      <button class="btn" type="button" bindtap="save">保存修改</button>
+      <button class="btn warn" type="button" bindtap="deleteEntry">删除</button>
+    </view>
+    <text class="status">{{saveStatus}}</text>
+  </view>
+</view>

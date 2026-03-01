@@ -1,0 +1,32 @@
+.gd-page{padding:20px;display:flex;flex-direction:column;gap:20px;background:#f5f7fb;min-height:100vh;font-size:14px;}
+.hero{background:#0f172a;color:#fff;padding:22px 20px;border-radius:20px;display:flex;flex-direction:column;gap:8px;}
+.score{font-size:46px;font-weight:700;line-height:1;}
+.label{font-size:13px;letter-spacing:1px;color:#93c5fd;text-transform:uppercase;}
+.desc{font-size:12px;color:#cbd5e1;line-height:1.5;}
+.shortfall{margin-top:4px;background:#1e293b;padding:8px 10px;border-radius:12px;}
+.sf-text{font-size:12px;color:#93c5fd;line-height:1.4;}
+.segments{display:flex;flex-direction:column;gap:14px;}
+.seg-card{background:#fff;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;box-shadow:0 4px 12px -4px rgba(0,0,0,.08);border:1px solid #e2e8f0;}
+.head{display:flex;align-items:center;justify-content:space-between;}
+.name{font-size:15px;font-weight:600;color:#1f2937;}
+.pct{font-size:16px;font-weight:600;color:#2563eb;}
+.bar{width:100%;height:10px;background:#e2e8f0;border-radius:6px;overflow:hidden;}
+.fill{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);}
+.tip{font-size:12px;color:#64748b;line-height:1.4;}
+.action{margin-top:4px;background:#2563eb;color:#fff;border:none;border-radius:999px;padding:4px 12px;font-size:12px;}
+.explain{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:8px;}
+.ttl{font-weight:600;font-size:15px;}
+.p{font-size:12px;color:#475569;line-height:1.5;}
+.radar-section{margin-top:6px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px;box-shadow:0 4px 14px -4px rgba(0,0,0,.08);} 
+.radar-title{font-size:15px;font-weight:600;display:block;margin-bottom:8px;}
+.radar-canvas{width:100%;height:320rpx;background:#f8fafc;border-radius:12px;}
+.radar-legend{display:flex;gap:12px;margin-top:8px;}
+.radar-legend .lg{font-size:11px;padding:4px 10px;border-radius:20px;}
+.radar-legend .lg.primary{background:#2563eb;color:#fff;}
+.radar-legend .lg.prev{background:#e2e8f0;color:#334155;}
+.radar-subdims{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.sd-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;}
+.sd-val{font-weight:600;}
+.sd-delta{font-size:11px;margin-left:6px;}
+.sd-delta.up{color:#16a34a;}
+.sd-delta.down{color:#dc2626;}

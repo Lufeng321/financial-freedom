@@ -1,0 +1,10 @@
+{
+  "name": "personal-growth-miniapp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personal growth WeChat mini program",
+  "license": "MIT",
+  "dependencies": {
+    "tdesign-miniprogram": "^1.10.1"
+  }
+}

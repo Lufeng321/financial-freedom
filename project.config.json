@@ -1,0 +1,14 @@
+{
+  "miniprogramRoot": "./",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "minified": true,
+    "urlCheck": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXML": true
+  }
+}

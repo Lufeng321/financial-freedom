@@ -1,0 +1,14 @@
+.pb-root{display:flex;flex-direction:column;gap:4px;}
+.pb-root.inline{flex-direction:row;align-items:center;gap:8px;}
+.pb-track{position:relative;height:8px;border-radius:5px;background:linear-gradient(90deg,#eee,#e4e4e4);overflow:hidden;}
+.pb-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#111,#444);transition:width .6s cubic-bezier(.4,.8,.4,1);}
+.pb-fill.flash{animation:flashGlow 1.2s ease-out;}
+.pb-glow{position:absolute;inset:0;background:radial-gradient(circle at 70% 50%,rgba(255,255,255,.4),rgba(255,255,255,0) 60%);pointer-events:none;animation:glowFade 1.2s ease-out;}
+@keyframes flashGlow{0%{filter:brightness(1.4);}60%{filter:brightness(1);}100%{filter:brightness(1);} }
+@keyframes glowFade{0%{opacity:0;}20%{opacity:1;}100%{opacity:0;}}
+.pb-root.small .pb-track{height:6px;}
+.pb-root.tiny .pb-track{height:4px;}
+.pb-meta{display:flex;align-items:center;gap:6px;font-size:11px;color:#555;}
+.pb-val{font-weight:600;}
+.theme-dark .pb-track{background:linear-gradient(90deg,#2a2a2a,#222);}
+.theme-dark .pb-fill{background:linear-gradient(90deg,#fafafa,#d9d9d9);}

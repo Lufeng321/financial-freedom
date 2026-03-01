@@ -1,0 +1,43 @@
+{
+  "version": "2.0",
+  "envId": "cloud1-3gys9fiz70739302",
+  "framework": {
+    "name": "growth-miniapp",
+    "plugins": {
+      "function": {
+        "use": "@cloudbase/framework-plugin-function",
+        "inputs": {
+          "functionRootPath": "./functions"
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "name": "login",
+      "timeout": 10,
+      "runtime": "Nodejs18.15",
+      "memorySize": 128
+    },
+    {
+      "name": "events-batch",
+      "timeout": 10,
+      "runtime": "Nodejs18.15",
+      "memorySize": 128
+    },
+    {
+      "name": "snapshot-daily",
+      "timeout": 10,
+      "runtime": "Nodejs18.15",
+      "memorySize": 128
+    }
+    ,{
+      "name": "create-user",
+      "timeout": 10,
+      "runtime": "Nodejs18.15",
+      "memorySize": 128
+    }
+  ],
+  "functionRoot": "./functions",
+  "region": "ap-shanghai"
+}
