@@ -69,6 +69,7 @@
 - **记账功能** - 收支记录、分类统计
 - **预算管理** - 月度预算、支出追踪
 - **被动收入模拟器** - 计算器、五年规划
+![2d99bf3baa6027ccbde90f65d87038ab](https://github.com/user-attachments/assets/bb505d60-30d2-4a96-8c9a-c0ba046d982b)
 
 ### 2. 技能成长 (Skill)
 - **技能列表** - 添加技能、进度追踪
@@ -76,24 +77,28 @@
 - **经验值系统** - XP累积、等级提升
 - **AI学习计划** - 智能生成学习路径
 - **任务导入** - 自动导入待办列表
+![4270f6e3cb335687381c27bc56096079](https://github.com/user-attachments/assets/7c129554-175a-4cb4-b2d6-c2cd423cf7b5)
 
 ### 3. 运动健康 (Sport)
 - **运动记录** - 多维指标采集 (时间/距离/次数/卡路里)
 - **分类管理** - 基础训练、耐力有氧、球类、计数运动
 - **数据同步** - 支持微信运动同步 (待接入)
 - **周统计** - 运动时长、达标率
+![2f25f91c25494a3f5372957e2260ad08](https://github.com/user-attachments/assets/03e1dfb6-460b-4990-9dd7-9bace932d24d)
 
 ### 4. 专注效率 (Pomodoro + Todo)
 - **番茄钟** - 25分钟专注计时
 - **任务管理** - 添加、编辑、删除、焦点标记
 - **习惯打卡** - 连续天数追踪、日历视图
 - **每日焦点** - 重点任务展示
+![b6617cc5e90a29ecb7bdb4b6d2136f86](https://github.com/user-attachments/assets/333e8aef-a8ab-4745-8d1c-703c80f893e2)
 
 ### 5. 反思日记 (Diary)
 - **日记记录** - 文本、日期、备注
 - **情绪评分** - 5级情感评分
 - **图片附件** - 支持上传图片
 - **历史回顾** - 日记列表查看
+![92cff64b3a2399d0ff39fcd386e0f326](https://github.com/user-attachments/assets/b8870cb4-af9d-43a4-a173-29badc1f9b53)
 
 ### 6. 数据可视化 (Dashboard)
 - **六大核心指标**:
@@ -105,6 +110,11 @@
   - 健康达标率
 - **趋势图表** - 数据趋势展示
 - **成长详情** - 深度数据分析
+
+
+有什么好的功能建议可以扫描下方二维码添加我的微信共同交流哦！
+![72521ee2b4410d9dedeb6a3169f26ea5](https://github.com/user-attachments/assets/6276a214-fcbb-4170-a8dc-9b60ea42e886)
+
 
 ## 云函数
 
@@ -738,4 +748,6 @@ MIT Licensed
 
 ## 联系方式
 
-如有问题或建议，欢迎提交 Issue。
+如有问题或建议，欢迎添加下方微信共同交流学习！
+![72521ee2b4410d9dedeb6a3169f26ea5](https://github.com/user-attachments/assets/ee4d5afc-52ac-4bb4-a74e-952994056867)
+
